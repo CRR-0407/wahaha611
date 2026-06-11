@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>娃哈哈AD钙奶 - 快乐双享</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=ZCOOL+KuaiLe&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Noto Sans SC', 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            background: #000;
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        /* ===== 第一页样式 —— 背景替换为参考图 ===== */
+        .page-one {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 1;
+            overflow: hidden;
+            /* 使用参考图作为背景 */
+            background: url('./page1-bg.jpg') no-repeat center center / cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .page-one.hidden {
+            display: none;
+        }
+
+        .grass-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(ellipse 80% 60% at 15% 85%, rgba(129, 199, 132, 0.5) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 50% 90%, rgba(104, 159, 56, 0.35) 0%, transparent 55%),
+                radial-gradient(ellipse 75% 55% at 80% 82%, rgba(129, 199, 132, 0.45) 0%, transparent 58%),
+                radial-gradient(ellipse 60% 40% at 30% 95%, rgba(76, 175, 80, 0.3) 0%, transparent 50%);
+            border-radius: 55% 60% 0 0 / 40px 35px 0 0;
+        }
+        .light-spots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .light-spot {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            animation: spotFloat 6s infinite;
+        }
+        .light-spot:nth-child(1) { width: 50px; height: 50px; top: 8%; left: 10% }
+        .light-spot:nth-child(2) { width: 35px; height: 35px; top: 15%; right: 14% }
+        .light-spot:nth-child(3) { width: 42px; height: 42px; top: 22%; left: 55% }
+        .light-spot:nth-child(4) { width: 28px; height: 28px; top: 5%; right: 35% }
+        .light-spot:nth-child(5) { width: 38px; height: 38px; top: 18%; left: 30% }
+        @keyframes spotFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: .25 }
+            25% { transform: translate(18px, -15px) scale(1.3); opacity: .4 }
+            50% { transform: translate(-10px, -28px) scale(.9); opacity: .2 }
+            75% { transform: translate(-20px, -8px) scale(1.2); opacity: .35 }
+        }
+
+        .top-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2;
+            text-align: center;
+            padding-top: clamp(18px, 4vh, 32px);
+            pointer-events: none;
+        }
+        .top-title {
+            font-size: clamp(26px, 5.5vw, 42px);
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.05em;
+        }
+        .top-subtitle {
+            font-size: clamp(12px, 2.5vw, 16px);
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 4px;
+        }
+
+        .bottles-area {
+            position: relative;
+            z-index: 5;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: clamp(4px, 1.2vw, 10px);
+            padding: 0 8px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .base-plate {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 88%;
+            height: 18px;
+            background: linear-gradient(180deg, #e8d5c4, #d7c4b0, #c9b59a);
+            border-radius: 50%;
+            z-index: 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        }
+
+        .bottle-unit {
+            position: relative;
+            z-index: 6;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: bottleAppear .7s forwards;
+            /* 修改2: 整个瓶子区域（含吸管）都可点击，不只是底部 */
+        }
+        /* 扩大点击覆盖区域到吸管顶部 */
+        .bottle-unit::before {
+            content: '';
+            position: absolute;
+            top: -60px;  /* 覆盖吸管区域 */
+            left: -8px;
+            right: -8px;
+            bottom: 0;
+            z-index: 11;
+            cursor: pointer;
+        }
+        @keyframes bottleAppear {
+            0% { opacity: 0; transform: translateY(50px) scale(.85) }
+            100% { opacity: 1; transform: translateY(0) scale(1) }
+        }
+        .bottle-unit.bouncing { animation: bottleJump .5s cubic-bezier(.34, 1.56, .64, 1) !important; }
+        @keyframes bottleJump {
+            0% { transform: translateY(0) }
+            25% { transform: translateY(-28px) }
+            50% { transform: translateY(-8px) }
+            75% { transform: translateY(-16px) }
+            100% { transform: translateY(0) }
+        }
+
+        .straw-tube {
+            position: absolute;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .straw-tube.wiggling { animation: strawShake .1s infinite; }
+        @keyframes strawShake {
+            0%, 100% { transform: rotate(-6deg) }
+            50% { transform: rotate(6deg) }
+        }
+
+        .bottle-svg-wrap {
+            width: clamp(60px, 16vw, 85px);
+            height: clamp(130px, 34vw, 185px);
+        }
+
+        .grid-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .grid-char {
+            position: absolute;
+            font-weight: 900;
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            will-change: transform, opacity, left, top;
+        }
+
+        .flying-particle {
+            position: fixed;
+            font-weight: 900;
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            pointer-events: none;
+            z-index: 50;
+            white-space: nowrap;
+            will-change: transform, opacity;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .explosion-particle {
+            position: fixed;
+            font-weight: 900;
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            pointer-events: none;
+            z-index: 55;
+            white-space: nowrap;
+            will-change: transform, opacity;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        .flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 60;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0);
+            transition: background 0.15s ease;
+        }
+        .flash-overlay.active { background: rgba(255, 255, 255, 0.7); }
+
+        .hint-tap {
+            position: absolute;
+            bottom: clamp(160px, 38vw, 220px);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 8;
+            color: #fff;
+            font-size: clamp(13px, 2.8vw, 17px);
+            font-weight: 700;
+            animation: hintGlow 2.2s infinite;
+        }
+        @keyframes hintGlow {
+            0%, 100% { opacity: .6 }
+            50% { opacity: 1 }
+        }
+
+        /* 修改1: P1中间引导词 */
+        .guide-tip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9;
+            background: rgba(255, 255, 255, 0.92);
+            color: #e6261a;
+            font-size: clamp(14px, 3.5vw, 18px);
+            font-weight: 900;
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            padding: 10px 26px;
+            border-radius: 30px;
+            white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(230, 38, 26, 0.25);
+            pointer-events: none;
+            animation: guideBounce 1.8s ease-in-out infinite;
+        }
+        @keyframes guideBounce {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); opacity: 0.9; }
+            50% { transform: translate(-50%, -50%) translateY(-8px); opacity: 1; }
+        }
+
+        /* ===== 第二页样式 —— 参考图背景+人物侧面剪影 ===== */
+        .page-two { display: none; }
+        .page-two.visible {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 50;
+            overflow: hidden;
+            background: url('./page2-bg.jpg') no-repeat center center / cover;
+            animation: pageFadeIn 0.5s ease forwards;
+        }
+        @keyframes pageFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .page-two .scene { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+
+        /* 填充容器 — 使用clipPath限制哈字只在人物轮廓内 */
+        .page-two .fill-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            clip-path: url(#personClip);
+            overflow: hidden;
+            z-index: 15;
+            pointer-events: none;
+        }
+        .page-two .ha-char {
+            position: absolute;
+            font-weight: 900;
+            color: #e6261a;
+            opacity: 0;
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            pointer-events: none;
+        }
+        .page-two .ha-char.filled { opacity: 1; }
+
+        /* 瓶子点击热区 — 覆盖人物手中瓶子所在区域 (右侧) */
+        .page-two .bottle-hitbox {
+            position: absolute;
+            left: clamp(45px, 16vw, 120px);
+            top: clamp(120px, 22vh, 200px);
+            width: clamp(180px, 50vw, 280px);
+            height: clamp(400px, 65vh, 500px);
+            cursor: pointer;
+            z-index: 30;
+            pointer-events: auto;
+        }
+        .page-two .bottle-hitbox:active { transform: scale(0.95); }
+        .page-two .bottle-hitbox.clicked { animation: bottleBounce2 .4s !important; }
+        @keyframes bottleBounce2 { 0% { transform: scale(1) translateY(0) } 30% { transform: scale(1.05) translateY(-18px) } 60% { transform: scale(0.98) translateY(-5px) } 100% { transform: scale(1) translateY(0) } }
+
+        /* 人物点击热区 — 覆盖白色剪影区域 (右下偏移) */
+        .page-two .person-hitbox {
+            position: absolute;
+            left: clamp(100px, 34vw, 170px);
+            top: clamp(240px, 42vh, 380px);
+            width: clamp(120px, 30vw, 180px);
+            height: clamp(280px, 48vh, 400px);
+            cursor: pointer;
+            z-index: 31;
+            pointer-events: auto;
+        }
+        .page-two .person-hitbox:active { transform: scale(0.96); }
+        .page-two .person-hitbox.clicked { animation: personTap .4s !important; }
+        @keyframes personTap { 0% { transform: scale(1); } 30% { transform: scale(1.04); } 100% { transform: scale(1); } }
+
+        /* 进度条 */
+        .page-two .progress-bar-container { position: absolute; bottom: clamp(18px, 3.5vh, 28px); left: 50%; transform: translateX(-50%); width: clamp(240px, 64vw, 320px); z-index: 25; }
+        .page-two .progress-bar-bg { width: 100%; height: 18px; background: rgba(255, 255, 255, 0.3); border-radius: 9px; }
+        .page-two .progress-bar-fill { height: 100%; background: linear-gradient(135deg, #ff6b6b, #e6261a); border-radius: 8px; width: 0%; transition: width .4s; }
+        .page-two .progress-text { color: #fff; font-size: 13px; font-weight: 900; text-align: center; margin-bottom: 5px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        /* 修改1: 提示文字向下移，从5vh→12vh，远离上方logo */
+        .page-two .hint-text-p2 { position: absolute; top: clamp(100px, 24vh, 150px); left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.92); color: #e6261a; padding: 12px 30px; border-radius: 25px; font-size: clamp(16px, 4.2vw, 22px); font-weight: 900; z-index: 35; animation: hintGlow 2.2s infinite; white-space: nowrap; }
+        .page-two .click-counter { position: absolute; top: clamp(10px, 2.5vh, 18px); right: clamp(10px, 3vw, 18px); background: rgba(255, 255, 255, 0.9); color: #e6261a; font-size: 13px; font-weight: 900; z-index: 30; padding: 6px 14px; border-radius: 20px; }
+
+        /* 庆祝覆盖层 */
+        .page-two .celebration-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 200; display: none; }
+        .page-two .celebration-overlay.active { display: block; pointer-events: auto; }
+        .page-two .celebration-overlay .overlay-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('./page3-bg.jpg') no-repeat center center / cover; animation: fadeInOverlay .6s forwards; }
+        @keyframes fadeInOverlay { 0% { opacity: 0 } 100% { opacity: 1 } }
+        .page-two .final-showcase { position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%) scale(0); display: flex; flex-direction: column; align-items: center; gap: 24px; z-index: 210; opacity: 0; animation: showcaseIn 1.2s cubic-bezier(.34, 1.56, .64, 1) .3s forwards; }
+        @keyframes showcaseIn { 0% { transform: translate(-50%, -50%) scale(0) rotate(-720deg); opacity: 0 } 60% { transform: translate(-50%, -50%) scale(1.15) rotate(20deg); opacity: 1 } 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1 } }
+        .page-two .final-bottle { animation: finalBounce 2s infinite 1.5s; filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.2)); }
+        @keyframes finalBounce { 0%, 100% { transform: translateY(0) rotate(-3deg) } 50% { transform: translateY(-22px) rotate(3deg) } }
+        .page-two .tagline { font-size: clamp(26px, 4.5vw, 50px); font-weight: 900; font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', 'Microsoft YaHei', sans-serif; text-align: center; line-height: 1.15; opacity: 0; animation: taglineIn .8s 1.5s forwards; letter-spacing: 0.08em; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15)); }
+        .page-two .tagline .line1 { color: #87CEEB; -webkit-text-stroke: 1.2px rgba(255,255,255,0.6); paint-order: stroke fill; display: block; text-shadow: 1.5px 1.5px 0 rgba(135,206,235,0.3), 0 0 10px rgba(135,206,235,0.4); animation: taglinePop1 1.5s ease-in-out infinite 2.3s; }
+        .page-two .tagline .line2 { color: #F4C430; -webkit-text-stroke: 1.2px rgba(255,255,255,0.6); paint-order: stroke fill; display: block; text-shadow: 1.5px 1.5px 0 rgba(244,196,48,0.3), 0 0 10px rgba(244,196,48,0.4); animation: taglinePop2 1.5s ease-in-out infinite 2.5s; }
+        @keyframes taglineIn { 0% { opacity: 0; transform: translateY(50px) scale(.5) rotate(-10deg); } 70% { opacity: 1; transform: translateY(-10px) scale(1.08); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes taglinePop1 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.04) rotate(1.5deg); } }
+        @keyframes taglinePop2 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.05) rotate(-1.5deg); } }
+        .page-two .burst-particle { position: fixed; font-weight: 900; font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif; font-size: 32px; z-index: 205; pointer-events: none; will-change: transform; color: #e6261a; text-shadow: 2px 2px 3px rgba(180, 20, 10, 0.3); }
+        .page-two .replay-btn { margin-top: 20px; padding: 16px 48px; font-size: 22px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #e6261a, #c62828); border: 3px solid #c62828; border-radius: 50px; cursor: pointer; opacity: 0; animation: btnPop .7s 2.3s forwards; }
+        @keyframes btnPop { 0% { opacity: 0; transform: scale(0) rotate(-180deg) } 100% { opacity: 1; transform: scale(1) rotate(0deg) } }
+    </style>
+</head>
+<body>
+    <div class="flash-overlay" id="flashOverlay"></div>
+
+    <!-- 第一页 (背景替换为参考图) -->
+    <div class="page-one" id="pageOne">
+        <div class="light-spots"><div class="light-spot"></div><div class="light-spot"></div><div class="light-spot"></div><div class="light-spot"></div><div class="light-spot"></div></div>
+        <div class="grass-layer"></div>
+        <div class="top-decoration"><div class="top-title">🧃 戳一戳AD钙奶 🧃</div><div class="top-subtitle">彩色喷泉·圆阵炸开</div></div>
+        <div class="hint-tap" id="hintTap">👆 点击瓶身，彩色哈字圆阵填满后炸开</div>
+        <!-- 修改1: P1中间引导词 -->
+        <div class="guide-tip">👆 戳一戳瓶身，快乐喷涌而出！</div>
+        <div class="grid-container" id="gridContainer"></div>
+        <div class="bottles-area">
+            <div class="base-plate"></div>
+            <div class="bottle-unit" id="bottle0" onclick="triggerFountain('bottle0')">
+                <div class="straw-tube" id="straw0" style="position:absolute;top:-52px;left:50%;transform:translateX(-50%);width:7px;height:52px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
+                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
+            </div>
+            <div class="bottle-unit" id="bottle1" onclick="triggerFountain('bottle1')">
+                <div class="straw-tube" id="straw1" style="position:absolute;top:-54px;left:50%;transform:translateX(-50%);width:7px;height:54px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
+                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
+            </div>
+            <div class="bottle-unit" id="bottle2" onclick="triggerFountain('bottle2')">
+                <div class="straw-tube" id="straw2" style="position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:7px;height:50px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
+                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
+            </div>
+            <div class="bottle-unit" id="bottle3" onclick="triggerFountain('bottle3')">
+                <div class="straw-tube" id="straw3" style="position:absolute;top:-51px;left:50%;transform:translateX(-50%);width:7px;height:51px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
+                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二页 (参考图背景 + 人物侧面剪影填充) -->
+    <div class="page-two" id="pageTwo">
+        <div class="scene" id="scene">
+            <!-- 隐藏的SVG — 精确人物侧面轮廓clipPath -->
+            <svg width="0" height="0" style="position:absolute;pointer-events:none;">
+                <defs>
+                    <!--
+                      人物剪影向下+向右移动到画面中央偏右下
+                      Y+0.05, X+0.05：头顶cx=0.45/cy=0.35, 身体cx=0.45/cy=0.58, 下半身cx=0.45/cy=0.80
+                    -->
+                    <clipPath id="personClip" clipPathUnits="objectBoundingBox">
+                        <ellipse cx="0.45" cy="0.35" rx="0.10" ry="0.07"/>
+                        <rect x="0.37" y="0.39" width="0.16" height="0.04" rx="0.01"/>
+                        <ellipse cx="0.45" cy="0.58" rx="0.17" ry="0.20"/>
+                        <ellipse cx="0.45" cy="0.80" rx="0.12" ry="0.09"/>
+                        <ellipse cx="0.31" cy="0.54" rx="0.06" ry="0.08" transform="rotate(-20, 0.31, 0.54)"/>
+                    </clipPath>
+                </defs>
+            </svg>
+
+            <div class="click-counter">已收集 <span id="haCount">0</span> 个哈</div>
+            <div class="hint-text-p2" id="hintText">👇 点击人物或瓶子！</div>
+
+            <!-- 填充容器 — 哈字只在人物轮廓内显示 -->
+            <div class="fill-container" id="fillContainer"></div>
+
+            <!-- 瓶子点击热区 -->
+            <div class="bottle-hitbox" id="bottleHitbox" onclick="handleBottleClick(event)"></div>
+            <!-- 人物点击热区 — 覆盖白色剪影区域 -->
+            <div class="person-hitbox" id="personHitbox" onclick="handleBottleClick(event)"></div>
+
+            <div class="progress-bar-container">
+                <div class="progress-text"><span id="progressPercent">0</span>% 快乐进度</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+            </div>
+        </div>
+        <!-- 庆祝覆盖层 -->
+        <div class="celebration-overlay" id="celebrationOverlay">
+            <div class="overlay-bg"></div>
+            <div class="final-showcase">
+                <div class="final-bottle"><svg width="72" height="160" viewBox="0 0 72 165"><ellipse cx="38" cy="163" rx="32" ry="7" fill="rgba(0,0,0,0.15)"/><rect x="4" y="42" width="64" height="118" rx="12" fill="#fff" stroke="#333" stroke-width="2.5"/><path d="M8,36 L8,20 Q8,10 20,10 L52,10 Q64,10 64,20 L64,36 Z" fill="#43a047" stroke="#2e7d32" stroke-width="2"/><ellipse cx="36" cy="10" rx="28" ry="7" fill="#66bb6a"/><rect x="5" y="49" width="62" height="23" rx="4" fill="#43a047"/><text x="36" y="66" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">娃哈哈</text><line x1="8" y1="74" x2="64" y2="74" stroke="#ffc107" stroke-width="2.5"/><text x="22" y="107" font-size="30" font-weight="900" fill="#e6261a">A</text><text x="43" y="109" font-size="28" font-weight="900" fill="#2e7d32">D</text><text x="18" y="128" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">钙</text></svg></div>
+                <div class="tagline"><div class="line1">不管几岁！</div><div class="line2">快乐万岁</div></div>
+                <button class="replay-btn" onclick="replayP2()">再玩一次</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 彩色调色板 =====
+        const COLOR_PALETTE = [
+            '#e6261a', '#ff6b6b', '#ff9a56', '#ffe066', '#69d2e7',
+            '#a78bfa', '#f472b6', '#4ecdc4', '#ff4081', '#40c4ff',
+            '#ff5252', '#ffab40', '#b2ff59', '#7c4dff', '#00e5ff',
+            '#ff1744', '#ff9100', '#76ff03', '#2979ff', '#d500f9'
+        ];
+        function randomColor() { return COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)]; }
+
+        // ===== 第一页逻辑 (完全不变) =====
+        const CELL_SIZE = 40;
+        const WORDS_PER_CLICK = 20;
+        let gridContainer = document.getElementById('gridContainer');
+        let fillOrder = [], currentFillIndex = 0, gridChars = [], isExploding = false;
+
+        function calculateCircleGrid() {
+            const w = window.innerWidth, h = window.innerHeight;
+            const centerX = w/2, centerY = h/2;
+            const maxRadius = Math.min(w, h)/2 - CELL_SIZE*0.6;
+            const cols = Math.ceil(w/CELL_SIZE), rows = Math.ceil(h/CELL_SIZE);
+            fillOrder = [];
+            for (let r=0; r<rows; r++) {
+                for (let c=0; c<cols; c++) {
+                    const cellX = c*CELL_SIZE+CELL_SIZE/2, cellY = r*CELL_SIZE+CELL_SIZE/2;
+                    const dx = cellX - centerX, dy = cellY - centerY;
+                    const dist = Math.sqrt(dx*dx+dy*dy);
+                    if (dist <= maxRadius) fillOrder.push({col:c, row:r, dist});
+                }
+            }
+            fillOrder.sort((a,b) => a.dist - b.dist);
+        }
+        function getCirclePosition(index) { if (index >= fillOrder.length) return null; const cell = fillOrder[index]; const offsetX = (window.innerWidth - Math.ceil(window.innerWidth/CELL_SIZE)*CELL_SIZE)/2; const offsetY = (window.innerHeight - Math.ceil(window.innerHeight/CELL_SIZE)*CELL_SIZE)/2; return { left: cell.col*CELL_SIZE + offsetX, top: cell.row*CELL_SIZE + offsetY }; }
+        function createStaticChar(left, top, color) { const el = document.createElement('div'); el.className='grid-char'; el.textContent='哈'; el.style.left=left+'px'; el.style.top=top+'px'; el.style.width=CELL_SIZE+'px'; el.style.height=CELL_SIZE+'px'; el.style.lineHeight=CELL_SIZE+'px'; el.style.fontSize=(CELL_SIZE*0.9)+'px'; el.style.color=color; el.dataset.origLeft=left; el.dataset.origTop=top; gridContainer.appendChild(el); gridChars.push(el); }
+
+        function triggerExplosion() {
+            if (isExploding) return;
+            isExploding = true;
+            const centerX = window.innerWidth/2, centerY = window.innerHeight/2;
+            document.getElementById('flashOverlay').classList.add('active');
+            setTimeout(() => document.getElementById('flashOverlay').classList.remove('active'), 200);
+            gridChars.forEach(charEl => {
+                const origLeft = parseFloat(charEl.dataset.origLeft), origTop = parseFloat(charEl.dataset.origTop);
+                const dx = origLeft+CELL_SIZE/2 - centerX, dy = origTop+CELL_SIZE/2 - centerY;
+                const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+                const nx = dx/dist, ny = dy/dist;
+                const force = 120 + Math.random()*300;
+                const targetLeft = origLeft + nx*force, targetTop = origTop + ny*force;
+                const rotTarget = (Math.random()-0.5)*720;
+                const startTime = performance.now(), duration = 600+Math.random()*400;
+                function anim(now) { const t = Math.min((now-startTime)/duration,1); const ease=1-Math.pow(1-t,3); charEl.style.left=(origLeft+(targetLeft-origLeft)*ease)+'px'; charEl.style.top=(origTop+(targetTop-origTop)*ease)+'px'; charEl.style.transform=`scale(${1+t*1.5}) rotate(${rotTarget*t}deg)`; charEl.style.opacity=1-t; if(t<1) requestAnimationFrame(anim); else charEl.remove(); }
+                requestAnimationFrame(anim);
+            });
+            for(let i=0;i<60;i++) {
+                const p=document.createElement('div'); p.className='explosion-particle'; p.textContent=['哈','哈哈','★'][Math.floor(Math.random()*3)]; p.style.color=randomColor(); p.style.fontSize=(20+Math.random()*36)+'px'; p.style.left=centerX+'px'; p.style.top=centerY+'px'; document.body.appendChild(p);
+                const angle=Math.random()*Math.PI*2, speed=150+Math.random()*500, tx=Math.cos(angle)*speed, ty=Math.sin(angle)*speed, startTime=performance.now(), dur=500+Math.random()*600;
+                function anim(now) { const t=Math.min((now-startTime)/dur,1), ease=1-Math.pow(1-t,2.5); p.style.transform=`translate(${tx*ease}px,${ty*ease}px) rotate(${t*600}deg) scale(${1+t*0.8})`; p.style.opacity=1-t; if(t<1) requestAnimationFrame(anim); else p.remove(); }
+                requestAnimationFrame(anim);
+            }
+            setTimeout(() => { document.getElementById('pageOne').classList.add('hidden'); document.getElementById('pageTwo').classList.add('visible'); gridContainer.innerHTML=''; gridChars=[]; currentFillIndex=0; isExploding=false; calculateCircleGrid(); }, 800);
+        }
+
+        window.triggerFountain = function(bottleId) {
+            if (isExploding) return;
+            const bottle = document.getElementById(bottleId);
+            if (!bottle || currentFillIndex >= fillOrder.length) return;
+            bottle.classList.add('bouncing');
+            const straw = document.getElementById('straw'+bottleId.slice(-1));
+            if(straw) straw.classList.add('wiggling');
+            setTimeout(() => { bottle.classList.remove('bouncing'); if(straw) straw.classList.remove('wiggling'); }, 500);
+            // 修改2: 起点统一从整个瓶子顶部（吸管顶端）发射，点击瓶身任意位置都从此处喷出
+            let originX, originY;
+            const bottleRect = bottle.getBoundingClientRect();
+            originX = bottleRect.left + bottleRect.width / 2;
+            if(straw) {
+                const r = straw.getBoundingClientRect();
+                originY = r.top; // 吸管顶端
+            } else {
+                originY = bottleRect.top - 10;
+            }
+            const count = Math.min(WORDS_PER_CLICK, fillOrder.length - currentFillIndex);
+            for(let i=0;i<count;i++) {
+                const targetIdx = currentFillIndex+i;
+                const pos = getCirclePosition(targetIdx);
+                if(!pos) break;
+                const color = randomColor();
+                const particle = document.createElement('div'); particle.className='flying-particle'; particle.textContent='哈'; particle.style.color=color; particle.style.fontSize=(CELL_SIZE*0.9)+'px'; particle.style.left=originX+'px'; particle.style.top=originY+'px'; document.body.appendChild(particle);
+                const startTime=performance.now(), duration=350+i*20;
+                const targetLeft=pos.left+CELL_SIZE/2, targetTop=pos.top+CELL_SIZE/2, midY=originY-70;
+                function anim(now) { const t=Math.min((now-startTime)/duration,1); let cx,cy; if(t<0.25){const p=t/0.25; cx=originX; cy=originY+(midY-originY)*p;}else{const p=(t-0.25)/0.75; cx=originX+(targetLeft-originX)*p; cy=midY+(targetTop-midY)*p;} particle.style.left=cx+'px'; particle.style.top=cy+'px'; particle.style.opacity=t<0.1?t/0.1:1; particle.style.transform=`scale(${1+Math.sin(t*Math.PI)*0.3}) rotate(${t*360}deg)`; if(t<1) requestAnimationFrame(anim); else { particle.remove(); createStaticChar(pos.left, pos.top, color); if(gridChars.length>=fillOrder.length && !isExploding) setTimeout(triggerExplosion,300); } }
+                requestAnimationFrame(anim);
+            }
+            currentFillIndex += count;
+        };
+
+        calculateCircleGrid();
+        window.addEventListener('resize', () => { if(!isExploding){ gridContainer.innerHTML=''; gridChars=[]; currentFillIndex=0; calculateCircleGrid(); } });
+
+        // ===== 第二页逻辑 —— 精确人物剪影：小字号哈字，胃部→头部填充 =====
+        const TOTAL_HA_NEEDED = 100, HA_PER_CLICK = 20;
+        let filledCount = 0, totalHaCollected = 0, isFinished = false;
+        let bottleHitbox = null,
+              fillContainerP2 = null,
+              progressFill = null,
+              progressPercent = null,
+              haCountEl = null,
+              hintTextP2 = null,
+              celebrationOverlay = null,
+              haPositionsP2 = [],
+              allHaElsP2 = [];
+
+        // 在页面显示时再获取DOM元素，确保绑定正确
+        function initPageTwo() {
+            bottleHitbox = document.getElementById('bottleHitbox');
+            fillContainerP2 = document.getElementById('fillContainer');
+            progressFill = document.getElementById('progressFill');
+            progressPercent = document.getElementById('progressPercent');
+            haCountEl = document.getElementById('haCount');
+            hintTextP2 = document.getElementById('hintText');
+            celebrationOverlay = document.getElementById('celebrationOverlay');
+        }
+
+        function buildHaChars() {
+            if (!fillContainerP2) initPageTwo();
+            haPositionsP2.length = 0;
+            generatePersonPositions();
+            fillContainerP2.innerHTML = '';
+            for (let i = 0; i < TOTAL_HA_NEEDED; i++) {
+                const p = haPositionsP2[i];
+                const el = document.createElement('div');
+                el.className = 'ha-char';
+                el.textContent = '哈';
+                el.style.left = (p.x * 100) + '%';
+                el.style.top = (p.y * 100) + '%';
+                el.style.fontSize = p.size + 'px';
+                el.style.color = p.color;
+                el.style.transform = 'rotate(' + p.rotation + 'deg)';
+                el.dataset.index = i;
+                fillContainerP2.appendChild(el);
+            }
+            allHaElsP2 = fillContainerP2.querySelectorAll('.ha-char');
+        }
+
+        /*
+         * 人物轮廓区域 (哈字下移0.06，clipPath不变):
+         *   胃部(y≈58%-74%)  头部(y≈34%-48%)
+         */
+        function generatePersonPositions() {
+            const regions = [
+                { cx: 0.45, cy: 0.64, rx: 0.16, ry: 0.08, yMin: 0.58, yMax: 0.74, xMin: 0.29, xMax: 0.61, count: 20 },
+                { cx: 0.45, cy: 0.58, rx: 0.15, ry: 0.06, yMin: 0.50, yMax: 0.62, xMin: 0.30, xMax: 0.60, count: 20 },
+                { cx: 0.45, cy: 0.50, rx: 0.14, ry: 0.05, yMin: 0.46, yMax: 0.54, xMin: 0.31, xMax: 0.59, count: 20 },
+                { cx: 0.45, cy: 0.47, rx: 0.08, ry: 0.02, yMin: 0.45, yMax: 0.49, xMin: 0.37, xMax: 0.53, count: 20 },
+                { cx: 0.45, cy: 0.41, rx: 0.09, ry: 0.05, yMin: 0.34, yMax: 0.48, xMin: 0.35, xMax: 0.55, count: 20 },
+            ];
+
+            haPositionsP2 = [];
+            regions.forEach(region => {
+                for (let i = 0; i < region.count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const r = Math.sqrt(Math.random());
+                    let x = region.cx + Math.cos(angle) * r * region.rx;
+                    let y = region.cy + Math.sin(angle) * r * region.ry;
+                    // 修改3: 严格钳制在区域内，不超出clipPath白色轮廓
+                    y = Math.max(region.yMin, Math.min(region.yMax, y));
+                    x = Math.max(region.xMin, Math.min(region.xMax, x));
+                    haPositionsP2.push({
+                        x, y,
+                        size: 14 + Math.random() * 2,
+                        rotation: -30 + Math.random() * 60,
+                        color: '#e6261a'
+                    });
+                }
+            });
+            // 按Y从大到小排序 = 从下往上填充
+            haPositionsP2.sort((a, b) => b.y - a.y);
+        }
+        generatePersonPositions();
+
+        // 页面加载完成后初始化
+        initPageTwo();
+        buildHaChars();
+
+        // 全局点击处理函数 — 直接用onclick绑定，避免addEventListener失效
+        window.handleBottleClick = function(e) {
+            e.stopPropagation();
+            if (isFinished) return;
+
+            if (!bottleHitbox) initPageTwo();
+
+            bottleHitbox.classList.add('clicked');
+            setTimeout(() => bottleHitbox.classList.remove('clicked'), 400);
+
+            // 获取瓶子热区位置 — 飞行起点在瓶口/吸管处 (热区上部)
+            const rect = bottleHitbox.getBoundingClientRect();
+            const sx = rect.left + rect.width / 2;
+            const sy = rect.top + rect.height * 0.10;  // 瓶口位置, 水流从瓶口向上喷射
+
+            // 飞行粒子：从瓶子飞向人物身体区域
+            for (let j = 0; j < 8; j++) {
+                setTimeout(() => {
+                    flyHaToPerson(sx, sy);
+                }, j * 40);
+            }
+
+            // 填充静态哈字：从当前填充位置开始，填HA_PER_CLICK个
+            for (let i = 0; i < HA_PER_CLICK; i++) {
+                if (filledCount >= TOTAL_HA_NEEDED) break;
+                const idx = filledCount++;
+                allHaElsP2[idx].classList.add('filled');
+                totalHaCollected++;
+            }
+            updateProgressP2();
+        };
+
+        function flyHaToPerson(sx, sy) {
+            const el = document.createElement('div');
+            el.style.cssText = 'position:fixed;font-weight:900;font-family:"ZCOOL KuaiLe","Microsoft YaHei",sans-serif;pointer-events:none;z-index:50;white-space:nowrap;will-change:transform,opacity;';
+            el.textContent = '哈';
+            el.style.color = '#e6261a';
+            el.style.fontSize = (14 + Math.random() * 4) + 'px';
+            el.style.left = sx + 'px';
+            el.style.top = sy + 'px';
+            document.body.appendChild(el);
+
+            /*
+             * 水流轨迹 — 模拟哈字像水流一样从瓶子流入人体:
+             *   阶段1 (0-30%): 从瓶口向上喷出, 弧线飞到人物嘴部 (画面 x≈40%, y≈34%)
+             *   阶段2 (30-70%): 沿喉管向下流淌, 经过喉管 (y:36%-40%) 进入身体
+             *   阶段3 (70-100%): 在身体内散开, 随机漂移到胃部区域 (y:42%-62%)
+             *
+             * 使用三次贝塞尔曲线 + 正弦摆动模拟水流效果
+             */
+            // 哈字下移后嘴部坐标：y约38%-42%, x约41%-49%
+            const mouthX = window.innerWidth * (0.41 + Math.random() * 0.08);
+            const mouthY = window.innerHeight * (0.38 + Math.random() * 0.04);
+            const throatY = mouthY + window.innerHeight * 0.04;
+            const bodyX = window.innerWidth * (0.39 + Math.random() * 0.12);
+            const bodyY = throatY + window.innerHeight * (0.12 + Math.random() * 0.18);
+
+            // 水流速度稍慢, 体现"流动感"
+            const dur = 600 + Math.random() * 400;
+            const start = performance.now();
+
+            // 水流摆动幅度
+            const swayFreq = 2.5 + Math.random() * 1.5;  // 摆动频率
+            const swayAmp = 8 + Math.random() * 16;       // 摆动幅度(px)
+
+            function anim(now) {
+                const t = Math.min((now - start) / dur, 1);
+
+                let cx, cy, scale, opacity, rot;
+
+                if (t < 0.30) {
+                    // 阶段1: 从瓶子向上弧线飞到嘴部 (ease-out)
+                    const pt = t / 0.30;
+                    const ease = 1 - Math.pow(1 - pt, 2.5);
+                    // 向上弧线: 控制点偏右上方
+                    const cpX = sx + (mouthX - sx) * 0.4 - 30;
+                    const cpY = sy - window.innerHeight * 0.12;
+                    const t2 = 1 - ease;
+                    cx = t2 * t2 * sx + 2 * t2 * ease * cpX + ease * ease * mouthX;
+                    cy = t2 * t2 * sy + 2 * t2 * ease * cpY + ease * ease * mouthY;
+                    scale = 0.8 + pt * 0.3;
+                    opacity = 0.6 + pt * 0.4;
+                    rot = -15 + pt * 25;
+                } else if (t < 0.70) {
+                    // 阶段2: 沿喉管向下流入身体 (线性流动+摆动)
+                    const pt = (t - 0.30) / 0.40;
+                    const easeIn = pt * pt;
+                    cx = mouthX + (bodyX - mouthX) * easeIn + Math.sin(pt * swayFreq * Math.PI) * swayAmp;
+                    cy = mouthY + (bodyY - mouthY) * easeIn;
+                    scale = 1.0 + Math.sin(pt * Math.PI) * 0.15;
+                    opacity = 0.9;
+                    rot = 25 + pt * 30 + Math.sin(pt * swayFreq * Math.PI) * 8;
+                } else {
+                    // 阶段3: 身体内漂移散开, 渐渐消失
+                    const pt = (t - 0.70) / 0.30;
+                    const easeOut = 1 - Math.pow(1 - pt, 2);
+                    cx = bodyX + Math.sin(pt * 4 * Math.PI) * swayAmp * (1 - pt);
+                    cy = bodyY + easeOut * window.innerHeight * 0.04;
+                    scale = 1.0 - pt * 0.3;
+                    opacity = 0.9 * (1 - pt);
+                    rot = 55 + pt * 40;
+                }
+
+                el.style.left = cx + 'px';
+                el.style.top = cy + 'px';
+                el.style.opacity = opacity;
+                el.style.transform = 'scale(' + scale + ') rotate(' + rot + 'deg)';
+
+                if (t < 1) {
+                    requestAnimationFrame(anim);
+                } else {
+                    el.remove();
+                }
+            }
+            requestAnimationFrame(anim);
+        }
+
+        function updateProgressP2() {
+            const pct = Math.round((filledCount / TOTAL_HA_NEEDED) * 100);
+            progressFill.style.width = pct + '%';
+            progressPercent.textContent = pct;
+            haCountEl.textContent = totalHaCollected;
+            if (pct === 100 && !isFinished) {
+                isFinished = true;
+                hintTextP2.textContent = '';
+                setTimeout(() => {
+                    celebrationOverlay.classList.add('active');
+                    setTimeout(() => {
+                        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+                        for (let w = 0; w < 4; w++) setTimeout(() => {
+                            for (let i = 0; i < 22; i++) createBurstParticle(cx, cy, w);
+                        }, w * 250);
+                        setTimeout(() => {
+                            for (let i = 0; i < 35; i++) createEdgeParticle();
+                        }, 1000);
+                    }, 150);
+                }, 400);
+            }
+        }
+
+        function createBurstParticle(cx, cy, wave) {
+            const p = document.createElement('div');
+            p.className = 'burst-particle';
+            p.textContent = ['哈', '哈哈', '哈哈哈'][Math.floor(Math.random() * 3)];
+            p.style.color = ['#e6261a', '#FF6B6B', '#FFE66D', '#4ECDC4', '#A78BFA'][Math.floor(Math.random() * 5)];
+            p.style.fontSize = (26 + Math.random() * 32) + 'px';
+            const angle = Math.random() * Math.PI * 2 + wave * 0.4;
+            const speed = 180 + Math.random() * 450 + wave * 120;
+            const tx = Math.cos(angle) * speed, ty = Math.sin(angle) * speed;
+            p.style.left = cx + 'px';
+            p.style.top = cy + 'px';
+            celebrationOverlay.appendChild(p);
+            const start = performance.now(), dur = 1400 + Math.random() * 1000;
+            function anim(now) {
+                const t = Math.min((now - start) / dur, 1);
+                const ease = 1 - Math.pow(1 - t, 2.2);
+                p.style.transform = 'translate(' + (tx * ease) + 'px, ' + (ty * ease) + 'px) rotate(' + (t * 800) + 'deg) scale(' + (1 + Math.sin(t * Math.PI * 2) * 0.4) + ')';
+                p.style.opacity = 1 - t * t * t;
+                if (t < 1) requestAnimationFrame(anim);
+                else p.remove();
+            }
+            requestAnimationFrame(anim);
+        }
+        function createEdgeParticle() {
+            const p = document.createElement('div');
+            p.className = 'burst-particle';
+            p.textContent = ['哈', '哈哈', '★'][Math.floor(Math.random() * 3)];
+            p.style.color = ['#e6261a', '#FF6B6B', '#4ECDC4', '#FFE66D'][Math.floor(Math.random() * 4)];
+            p.style.fontSize = (22 + Math.random() * 28) + 'px';
+            const side = Math.floor(Math.random() * 4);
+            let sx, sy;
+            const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+            if (side === 0) { sx = Math.random() * window.innerWidth; sy = -40; }
+            else if (side === 1) { sx = window.innerWidth + 40; sy = Math.random() * window.innerHeight; }
+            else if (side === 2) { sx = Math.random() * window.innerWidth; sy = window.innerHeight + 40; }
+            else { sx = -40; sy = Math.random() * window.innerHeight; }
+            const tx = cx + (Math.random() - 0.5) * window.innerWidth * 0.65;
+            const ty = cy + (Math.random() - 0.5) * window.innerHeight * 0.65;
+            p.style.left = sx + 'px';
+            p.style.top = sy + 'px';
+            celebrationOverlay.appendChild(p);
+            const start = performance.now(), dur = 1100 + Math.random() * 900;
+            function anim(now) {
+                const t = Math.min((now - start) / dur, 1);
+                const ease = 1 - Math.pow(1 - t, 3);
+                p.style.transform = 'translate(' + ((tx - sx) * ease) + 'px, ' + ((ty - sy) * ease) + 'px) rotate(' + (t * 620) + 'deg)';
+                p.style.opacity = t < 0.65 ? t / 0.65 : 1 - (t - 0.65) / 0.35;
+                if (t < 1) requestAnimationFrame(anim);
+                else p.remove();
+            }
+            requestAnimationFrame(anim);
+        }
+
+        window.replayP2 = function() {
+            isFinished = false; filledCount = 0; totalHaCollected = 0;
+            initPageTwo();
+            progressFill.style.width = '0%'; progressPercent.textContent = '0'; haCountEl.textContent = '0';
+            hintTextP2.textContent = '👇 点击人物或瓶子！';
+            celebrationOverlay.classList.remove('active');
+            celebrationOverlay.querySelectorAll('.burst-particle').forEach(p => p.remove());
+            // 重置哈字：重新生成位置和元素
+            buildHaChars();
+            document.getElementById('pageTwo').classList.remove('visible');
+            document.getElementById('pageOne').classList.remove('hidden');
+            gridContainer.innerHTML = ''; gridChars = []; currentFillIndex = 0; isExploding = false;
+            calculateCircleGrid();
+        };
+
+        // 页面加载完成后初始化
+        initPageTwo();
+        generatePersonPositions();
+        // 预创建所有哈字元素
+        fillContainerP2.innerHTML = '';
+        for (let i = 0; i < TOTAL_HA_NEEDED; i++) {
+            const p = haPositionsP2[i];
+            const el = document.createElement('div');
+            el.className = 'ha-char';
+            el.textContent = '哈';
+            el.style.left = (p.x * 100) + '%';
+            el.style.top = (p.y * 100) + '%';
+            el.style.fontSize = p.size + 'px';
+            el.style.color = p.color;
+            el.style.transform = 'rotate(' + p.rotation + 'deg)';
+            el.dataset.index = i;
+            fillContainerP2.appendChild(el);
+        }
+        allHaElsP2 = fillContainerP2.querySelectorAll('.ha-char');
+    </script>
+</body>
+</html>
