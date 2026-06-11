@@ -287,7 +287,7 @@
             height: 100vh;
             z-index: 50;
             overflow: hidden;
-            background: url('./page2-bg.jpg') no-repeat center center / cover;
+            background: url('./page2-bg-clean.jpg') no-repeat center center / cover;
             animation: pageFadeIn 0.5s ease forwards;
         }
         @keyframes pageFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -349,6 +349,7 @@
         .page-two .progress-bar-bg { width: 100%; height: 18px; background: rgba(255, 255, 255, 0.3); border-radius: 9px; }
         .page-two .progress-bar-fill { height: 100%; background: linear-gradient(135deg, #ff6b6b, #e6261a); border-radius: 8px; width: 0%; transition: width .4s; }
         .page-two .progress-text { color: #fff; font-size: 13px; font-weight: 900; text-align: center; margin-bottom: 5px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+        .p2-logo { position: absolute; top: clamp(6px, 1.5vh, 12px); left: clamp(8px, 2vw, 16px); height: clamp(48px, 10vh, 70px); width: auto; z-index: 31; mix-blend-mode: screen; filter: invert(1); }
         /* 修改1: 提示文字向下移，从5vh→12vh，远离上方logo */
         .page-two .hint-text-p2 { position: absolute; top: clamp(100px, 24vh, 150px); left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.92); color: #e6261a; padding: 12px 30px; border-radius: 25px; font-size: clamp(16px, 4.2vw, 22px); font-weight: 900; z-index: 35; animation: hintGlow 2.2s infinite; white-space: nowrap; }
         .page-two .click-counter { position: absolute; top: clamp(10px, 2.5vh, 18px); right: clamp(10px, 3vw, 18px); background: rgba(255, 255, 255, 0.9); color: #e6261a; font-size: 13px; font-weight: 900; z-index: 30; padding: 6px 14px; border-radius: 20px; }
@@ -369,7 +370,7 @@
         @keyframes taglinePop1 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.04) rotate(1.5deg); } }
         @keyframes taglinePop2 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.05) rotate(-1.5deg); } }
         .page-two .burst-particle { position: fixed; font-weight: 900; font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif; font-size: 32px; z-index: 205; pointer-events: none; will-change: transform; color: #e6261a; text-shadow: 2px 2px 3px rgba(180, 20, 10, 0.3); }
-        .page-two .replay-btn { margin-top: 20px; padding: 16px 48px; font-size: 22px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #e6261a, #c62828); border: 3px solid #c62828; border-radius: 50px; cursor: pointer; opacity: 0; animation: btnPop .7s 2.3s forwards; }
+        .page-two .replay-btn { margin-top: 20px; padding: 16px 36px; font-size: clamp(18px, 4vw, 22px); font-weight: 900; color: #fff; background: linear-gradient(135deg, #e6261a, #c62828); border: 3px solid #c62828; border-radius: 50px; cursor: pointer; opacity: 0; animation: btnPop .7s 2.3s forwards; white-space: nowrap; min-width: clamp(140px, 36vw, 180px); }
         @keyframes btnPop { 0% { opacity: 0; transform: scale(0) rotate(-180deg) } 100% { opacity: 1; transform: scale(1) rotate(0deg) } }
     </style>
 </head>
@@ -409,6 +410,8 @@
     <!-- 第二页 (参考图背景 + 人物侧面剪影填充) -->
     <div class="page-two" id="pageTwo">
         <div class="scene" id="scene">
+            <!-- P2顶部居中娃哈哈Logo (红底白字) -->
+            <img class="p2-logo" src="./wahaha-logo.png" alt="娃哈哈">
             <!-- 隐藏的SVG — 精确人物侧面轮廓clipPath -->
             <svg width="0" height="0" style="position:absolute;pointer-events:none;">
                 <defs>
