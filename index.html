@@ -1,871 +1,1006 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>娃哈哈AD钙奶 - 快乐双享</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=ZCOOL+KuaiLe&display=swap');
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Noto Sans SC', 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            background: #000;
-            height: 100vh;
-            height: 100dvh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>水果接接乐 🍎</title>
+<link href="https://fonts.googleapis.com/css2?family=Sniglet:wght@400;800&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --cream:#FFF8E7; --warm-yellow:#F4D35E; --soft-green:#7EBF8E; --earth-brown:#8B6914;
+  --deep-green:#4A7C59; --shadow-brown:rgba(139,105,20,0.3); --danger-red:#E84855;
+}
+body {
+  background:#1a1a2e;
+  font-family:'Sniglet','ZCOOL KuaiLe','PingFang SC','Microsoft YaHei',sans-serif;
+  overflow:hidden; width:100vw; height:100vh;
+}
+#appRoot {
+  position:fixed; top:0; left:0; width:100vw; height:100vh;
+  overflow:hidden; z-index:1;
+}
 
-        /* ===== 第一页样式 —— 背景替换为参考图 ===== */
-        .page-one {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            z-index: 1;
-            overflow: hidden;
-            /* 使用参考图作为背景 */
-            background: url('./page1-bg.jpg') no-repeat center center / cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-        }
-        .page-one.hidden {
-            display: none;
-        }
+/* ============ 通用页面容器 ============ */
+.page {
+  position:absolute; inset:0; z-index:200; display:none;
+  flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(8px,1.5vh,16px);
+}
+.page.active { display:flex; }
 
-        .grass-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 35%;
-            pointer-events: none;
-            z-index: 0;
-            background: radial-gradient(ellipse 80% 60% at 15% 85%, rgba(129, 199, 132, 0.5) 0%, transparent 60%),
-                radial-gradient(ellipse 70% 50% at 50% 90%, rgba(104, 159, 56, 0.35) 0%, transparent 55%),
-                radial-gradient(ellipse 75% 55% at 80% 82%, rgba(129, 199, 132, 0.45) 0%, transparent 58%),
-                radial-gradient(ellipse 60% 40% at 30% 95%, rgba(76, 175, 80, 0.3) 0%, transparent 50%);
-            border-radius: 55% 60% 0 0 / 40px 35px 0 0;
-        }
-        .light-spots {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .light-spot {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            animation: spotFloat 6s infinite;
-        }
-        .light-spot:nth-child(1) { width: 50px; height: 50px; top: 8%; left: 10% }
-        .light-spot:nth-child(2) { width: 35px; height: 35px; top: 15%; right: 14% }
-        .light-spot:nth-child(3) { width: 42px; height: 42px; top: 22%; left: 55% }
-        .light-spot:nth-child(4) { width: 28px; height: 28px; top: 5%; right: 35% }
-        .light-spot:nth-child(5) { width: 38px; height: 38px; top: 18%; left: 30% }
-        @keyframes spotFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: .25 }
-            25% { transform: translate(18px, -15px) scale(1.3); opacity: .4 }
-            50% { transform: translate(-10px, -28px) scale(.9); opacity: .2 }
-            75% { transform: translate(-20px, -8px) scale(1.2); opacity: .35 }
-        }
+/* ============ PAGE 1: 水果选择 ============ */
+#pageSelect {
+  background:linear-gradient(160deg,rgba(45,80,45,0.97) 0%,rgba(30,55,30,0.97) 50%,rgba(20,40,20,0.98) 100%);
+  backdrop-filter:blur(6px);
+}
+#pageSelect h1 {
+  font-size:clamp(22px,3.5vw,42px); font-weight:800; letter-spacing:4px;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif;
+  background:linear-gradient(180deg,#F4D35E 0%,#E8A020 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 2px 6px rgba(244,211,94,0.4));
+}
+#pageSelect .subtitle {
+  font-size:clamp(11px,1.4vw,15px); color:rgba(255,255,255,0.65);
+  letter-spacing:1px;
+}
 
-        .top-decoration {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 2;
-            text-align: center;
-            padding-top: clamp(18px, 4vh, 32px);
-            pointer-events: none;
-        }
-        .top-title {
-            font-size: clamp(26px, 5.5vw, 42px);
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-            letter-spacing: 0.05em;
-        }
-        .top-subtitle {
-            font-size: clamp(12px, 2.5vw, 16px);
-            color: rgba(255, 255, 255, 0.85);
-            margin-top: 4px;
-        }
+#fruitGrid {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:clamp(8px,1.2vw,14px);
+  width:min(88vw, 640px);
+  margin-top:clamp(4px,0.8vh,10px);
+}
+.fruitCard {
+  position:relative;
+  width:100%; aspect-ratio:1 / 1.05;
+  min-height:72px; max-height:clamp(84px,12vh,130px);
+  border-radius:16px;
+  background:rgba(255,255,255,0.07);
+  border:2px solid rgba(255,255,255,0.12);
+  cursor:pointer; transition:all 0.18s;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  user-select:none; -webkit-user-select:none;
+}
+.fruitCard:hover {
+  transform:translateY(-4px) scale(1.03);
+  background:rgba(255,255,255,0.13);
+  border-color:rgba(244,211,94,0.5);
+  box-shadow:0 8px 20px rgba(0,0,0,0.3), 0 0 12px rgba(244,211,94,0.2);
+}
+.fruitCard.selected {
+  background:rgba(244,211,94,0.15);
+  border-color:#F4D35E;
+  box-shadow:0 0 0 2px rgba(244,211,94,0.35), 0 6px 18px rgba(0,0,0,0.25);
+}
+.fruitCard.selected::after {
+  content:'✓'; position:absolute; top:5px; right:9px;
+  font-size:14px; font-weight:bold; color:#F4D35E;
+  text-shadow:0 0 6px rgba(244,211,94,0.6);
+}
+.fruitCard canvas { width:clamp(30px,5vw,52px); height:clamp(30px,5vw,52px); pointer-events:none; }
+.fruitCard .fruitLabel {
+  font-size:clamp(9px,1.1vw,13px);
+  color:rgba(255,255,255,0.85); font-weight:bold; pointer-events:none;
+}
 
-        .bottles-area {
-            position: relative;
-            z-index: 5;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: clamp(4px, 1.2vw, 10px);
-            padding: 0 8px;
-            margin-bottom: 30px;
-            width: 100%;
-            max-width: 500px;
-        }
-        .base-plate {
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 88%;
-            height: 18px;
-            background: linear-gradient(180deg, #e8d5c4, #d7c4b0, #c9b59a);
-            border-radius: 50%;
-            z-index: 0;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-        }
+#selectCount {
+  font-size:clamp(11px,1.3vw,14px); color:rgba(255,255,255,0.55);
+  letter-spacing:1px;
+}
+#btnEnter {
+  margin-top:clamp(2px,0.5vh,6px);
+  padding:clamp(8px,1.5vh,14px) clamp(28px,5vw,56px);
+  font-size:clamp(14px,1.8vw,20px); font-weight:800;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif;
+  color:#FFF;
+  background:linear-gradient(180deg,#7EBF8E 0%,#4A7C59 100%);
+  border:2px solid #3D6B47; border-radius:50px; cursor:pointer;
+  box-shadow:0 4px 0 #2A4D34, 0 6px 20px rgba(74,124,89,0.35);
+  transition:all 0.15s; letter-spacing:2px;
+}
+#btnEnter:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 0 #2A4D34, 0 10px 24px rgba(74,124,89,0.4); }
+#btnEnter:active:not(:disabled) { transform:translateY(2px); box-shadow:0 2px 0 #2A4D34, 0 3px 8px rgba(74,124,89,0.3); }
+#btnEnter:disabled { opacity:0.35; cursor:not-allowed; }
 
-        .bottle-unit {
-            position: relative;
-            z-index: 6;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: bottleAppear .7s forwards;
-            /* 修改2: 整个瓶子区域（含吸管）都可点击，不只是底部 */
-        }
-        /* 扩大点击覆盖区域到吸管顶部 */
-        .bottle-unit::before {
-            content: '';
-            position: absolute;
-            top: -60px;  /* 覆盖吸管区域 */
-            left: -8px;
-            right: -8px;
-            bottom: 0;
-            z-index: 11;
-            cursor: pointer;
-        }
-        @keyframes bottleAppear {
-            0% { opacity: 0; transform: translateY(50px) scale(.85) }
-            100% { opacity: 1; transform: translateY(0) scale(1) }
-        }
-        .bottle-unit.bouncing { animation: bottleJump .5s cubic-bezier(.34, 1.56, .64, 1) !important; }
-        @keyframes bottleJump {
-            0% { transform: translateY(0) }
-            25% { transform: translateY(-28px) }
-            50% { transform: translateY(-8px) }
-            75% { transform: translateY(-16px) }
-            100% { transform: translateY(0) }
-        }
+/* ============ GAME CONTAINER ============ */
+#gameContainer { position:absolute; inset:0; z-index:1; display:none; }
+#gameContainer.active { display:block; }
+#gameCanvas { position:absolute; top:0; left:0; width:100%; height:100%; }
+#hiddenVideo { position:absolute; top:-9999px; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none; }
+#camStatus { position:absolute; top:8px; right:12px; font-size:clamp(9px,1vw,11px); color:rgba(255,255,255,0.6); background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:6px; z-index:20; pointer-events:none; }
 
-        .straw-tube {
-            position: absolute;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .straw-tube.wiggling { animation: strawShake .1s infinite; }
-        @keyframes strawShake {
-            0%, 100% { transform: rotate(-6deg) }
-            50% { transform: rotate(6deg) }
-        }
+/* 计时器 */
+#timerBar {
+  position:absolute; top:clamp(8px,1.8vh,16px); left:50%; transform:translateX(-50%);
+  font-size:clamp(24px,4.5vw,36px); font-weight:800; color:#FFF;
+  background:rgba(0,0,0,0.55); padding:6px 28px; border-radius:18px;
+  border:2px solid rgba(255,255,255,0.35); z-index:15;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif; letter-spacing:2px;
+  text-shadow:0 2px 4px rgba(0,0,0,0.5);
+}
+#timerBar.urgent { color:#FF5050; border-color:#FF5050; animation:timerPulse 0.5s ease-in-out infinite; }
+@keyframes timerPulse { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.1)} }
 
-        .bottle-svg-wrap {
-            width: clamp(60px, 16vw, 85px);
-            height: clamp(130px, 34vw, 185px);
-        }
+/* HUD 得分 */
+#hudScore {
+  position:absolute; top:clamp(8px,1.8vh,16px); left:clamp(10px,1.5vw,20px);
+  font-size:clamp(13px,1.8vw,18px); font-weight:bold; color:#FFF;
+  background:rgba(0,0,0,0.55); padding:5px 16px; border-radius:14px;
+  border:2px solid rgba(255,255,255,0.3); z-index:15;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif;
+  text-shadow:0 1px 2px rgba(0,0,0,0.4);
+}
 
-        .grid-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .grid-char {
-            position: absolute;
-            font-weight: 900;
-            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            will-change: transform, opacity, left, top;
-        }
+/* 手数量提示 */
+#handCountBadge {
+  position:absolute; top:clamp(8px,1.8vh,16px); right:clamp(40px,5vw,60px);
+  z-index:20; pointer-events:none; display:none;
+  font-size:clamp(10px,1.2vw,14px); font-weight:bold; color:#FFF;
+  background:rgba(244,211,94,0.6); padding:3px 12px; border-radius:10px;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif; letter-spacing:1px;
+}
 
-        .flying-particle {
-            position: fixed;
-            font-weight: 900;
-            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-            pointer-events: none;
-            z-index: 50;
-            white-space: nowrap;
-            will-change: transform, opacity;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
+/* 状态栏 */
+#statusBar {
+  position:absolute; bottom:clamp(8px,1.5vh,16px); left:50%; transform:translateX(-50%);
+  font-size:clamp(10px,1.2vw,13px); color:rgba(255,255,255,0.8);
+  pointer-events:none; z-index:10; letter-spacing:1px;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif;
+  background:rgba(0,0,0,0.45); padding:3px 14px; border-radius:10px;
+  max-width:80vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
 
-        .explosion-particle {
-            position: fixed;
-            font-weight: 900;
-            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-            pointer-events: none;
-            z-index: 55;
-            white-space: nowrap;
-            will-change: transform, opacity;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-        }
+/* COMBO / 得分提示 */
+#comboFlash {
+  position:absolute; top:40%; left:50%; transform:translate(-50%,-50%);
+  font-size:clamp(24px,4vw,40px); font-weight:bold;
+  color:#FFF; text-shadow:0 2px 0 rgba(0,0,0,0.4), 0 0 20px rgba(244,211,94,0.6);
+  pointer-events:none; z-index:60; opacity:0;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif; letter-spacing:2px;
+  transition:opacity 0.4s, transform 0.4s;
+}
 
-        .flash-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 60;
-            pointer-events: none;
-            background: rgba(255, 255, 255, 0);
-            transition: background 0.15s ease;
-        }
-        .flash-overlay.active { background: rgba(255, 255, 255, 0.7); }
-
-        .hint-tap {
-            position: absolute;
-            bottom: clamp(160px, 38vw, 220px);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 8;
-            color: #fff;
-            font-size: clamp(13px, 2.8vw, 17px);
-            font-weight: 700;
-            animation: hintGlow 2.2s infinite;
-        }
-        @keyframes hintGlow {
-            0%, 100% { opacity: .6 }
-            50% { opacity: 1 }
-        }
-
-        /* 修改1: P1中间引导词 */
-        .guide-tip {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9;
-            background: rgba(255, 255, 255, 0.92);
-            color: #e6261a;
-            font-size: clamp(14px, 3.5vw, 18px);
-            font-weight: 900;
-            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-            padding: 10px 26px;
-            border-radius: 30px;
-            white-space: nowrap;
-            box-shadow: 0 4px 16px rgba(230, 38, 26, 0.25);
-            pointer-events: none;
-            animation: guideBounce 1.8s ease-in-out infinite;
-        }
-        @keyframes guideBounce {
-            0%, 100% { transform: translate(-50%, -50%) translateY(0); opacity: 0.9; }
-            50% { transform: translate(-50%, -50%) translateY(-8px); opacity: 1; }
-        }
-
-        /* ===== 第二页样式 —— 参考图背景+人物侧面剪影 ===== */
-        .page-two { display: none; }
-        .page-two.visible {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 50;
-            overflow: hidden;
-            background: url('./page2-bg-clean.jpg') no-repeat center center / cover;
-            animation: pageFadeIn 0.5s ease forwards;
-        }
-        @keyframes pageFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-        .page-two .scene { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
-
-        /* 填充容器 — 使用clipPath限制哈字只在人物轮廓内 */
-        .page-two .fill-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            clip-path: url(#personClip);
-            overflow: hidden;
-            z-index: 15;
-            pointer-events: none;
-        }
-        .page-two .ha-char {
-            position: absolute;
-            font-weight: 900;
-            color: #e6261a;
-            opacity: 0;
-            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-            transition: opacity 0.35s ease, transform 0.35s ease;
-            pointer-events: none;
-        }
-        .page-two .ha-char.filled { opacity: 1; }
-
-        /* 瓶子点击热区 — 覆盖人物手中瓶子所在区域 (右侧) */
-        .page-two .bottle-hitbox {
-            position: absolute;
-            left: clamp(45px, 16vw, 120px);
-            top: clamp(120px, 22vh, 200px);
-            width: clamp(180px, 50vw, 280px);
-            height: clamp(400px, 65vh, 500px);
-            cursor: pointer;
-            z-index: 30;
-            pointer-events: auto;
-        }
-        .page-two .bottle-hitbox:active { transform: scale(0.95); }
-        .page-two .bottle-hitbox.clicked { animation: bottleBounce2 .4s !important; }
-        @keyframes bottleBounce2 { 0% { transform: scale(1) translateY(0) } 30% { transform: scale(1.05) translateY(-18px) } 60% { transform: scale(0.98) translateY(-5px) } 100% { transform: scale(1) translateY(0) } }
-
-        /* 人物点击热区 — 覆盖白色剪影区域 (右下偏移) */
-        .page-two .person-hitbox {
-            position: absolute;
-            left: clamp(100px, 34vw, 170px);
-            top: clamp(240px, 42vh, 380px);
-            width: clamp(120px, 30vw, 180px);
-            height: clamp(280px, 48vh, 400px);
-            cursor: pointer;
-            z-index: 31;
-            pointer-events: auto;
-        }
-        .page-two .person-hitbox:active { transform: scale(0.96); }
-        .page-two .person-hitbox.clicked { animation: personTap .4s !important; }
-        @keyframes personTap { 0% { transform: scale(1); } 30% { transform: scale(1.04); } 100% { transform: scale(1); } }
-
-        /* 进度条 */
-        .page-two .progress-bar-container { position: absolute; bottom: clamp(18px, 3.5vh, 28px); left: 50%; transform: translateX(-50%); width: clamp(240px, 64vw, 320px); z-index: 25; }
-        .page-two .progress-bar-bg { width: 100%; height: 18px; background: rgba(255, 255, 255, 0.3); border-radius: 9px; }
-        .page-two .progress-bar-fill { height: 100%; background: linear-gradient(135deg, #ff6b6b, #e6261a); border-radius: 8px; width: 0%; transition: width .4s; }
-        .page-two .progress-text { color: #fff; font-size: 13px; font-weight: 900; text-align: center; margin-bottom: 5px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
-        .p2-logo { position: absolute; top: clamp(6px, 1.5vh, 12px); left: clamp(8px, 2vw, 16px); height: clamp(48px, 10vh, 70px); width: auto; z-index: 31; mix-blend-mode: screen; filter: invert(1); }
-        /* 修改1: 提示文字向下移，从5vh→12vh，远离上方logo */
-        .page-two .hint-text-p2 { position: absolute; top: clamp(100px, 24vh, 150px); left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.92); color: #e6261a; padding: 12px 30px; border-radius: 25px; font-size: clamp(16px, 4.2vw, 22px); font-weight: 900; z-index: 35; animation: hintGlow 2.2s infinite; white-space: nowrap; }
-        .page-two .click-counter { position: absolute; top: clamp(10px, 2.5vh, 18px); right: clamp(10px, 3vw, 18px); background: rgba(255, 255, 255, 0.9); color: #e6261a; font-size: 13px; font-weight: 900; z-index: 30; padding: 6px 14px; border-radius: 20px; }
-
-        /* 庆祝覆盖层 */
-        .page-two .celebration-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 200; display: none; }
-        .page-two .celebration-overlay.active { display: block; pointer-events: auto; }
-        .page-two .celebration-overlay .overlay-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('./page3-bg.jpg') no-repeat center center / cover; animation: fadeInOverlay .6s forwards; }
-        @keyframes fadeInOverlay { 0% { opacity: 0 } 100% { opacity: 1 } }
-        .page-two .final-showcase { position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%) scale(0); display: flex; flex-direction: column; align-items: center; gap: 24px; z-index: 210; opacity: 0; animation: showcaseIn 1.2s cubic-bezier(.34, 1.56, .64, 1) .3s forwards; }
-        @keyframes showcaseIn { 0% { transform: translate(-50%, -50%) scale(0) rotate(-720deg); opacity: 0 } 60% { transform: translate(-50%, -50%) scale(1.15) rotate(20deg); opacity: 1 } 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1 } }
-        .page-two .final-bottle { animation: finalBounce 2s infinite 1.5s; filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.2)); }
-        @keyframes finalBounce { 0%, 100% { transform: translateY(0) rotate(-3deg) } 50% { transform: translateY(-22px) rotate(3deg) } }
-        .page-two .tagline { font-size: clamp(26px, 4.5vw, 50px); font-weight: 900; font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', 'Microsoft YaHei', sans-serif; text-align: center; line-height: 1.15; opacity: 0; animation: taglineIn .8s 1.5s forwards; letter-spacing: 0.08em; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15)); }
-        .page-two .tagline .line1 { color: #87CEEB; -webkit-text-stroke: 1.2px rgba(255,255,255,0.6); paint-order: stroke fill; display: block; text-shadow: 1.5px 1.5px 0 rgba(135,206,235,0.3), 0 0 10px rgba(135,206,235,0.4); animation: taglinePop1 1.5s ease-in-out infinite 2.3s; }
-        .page-two .tagline .line2 { color: #F4C430; -webkit-text-stroke: 1.2px rgba(255,255,255,0.6); paint-order: stroke fill; display: block; text-shadow: 1.5px 1.5px 0 rgba(244,196,48,0.3), 0 0 10px rgba(244,196,48,0.4); animation: taglinePop2 1.5s ease-in-out infinite 2.5s; }
-        @keyframes taglineIn { 0% { opacity: 0; transform: translateY(50px) scale(.5) rotate(-10deg); } 70% { opacity: 1; transform: translateY(-10px) scale(1.08); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes taglinePop1 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.04) rotate(1.5deg); } }
-        @keyframes taglinePop2 { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.05) rotate(-1.5deg); } }
-        .page-two .burst-particle { position: fixed; font-weight: 900; font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif; font-size: 32px; z-index: 205; pointer-events: none; will-change: transform; color: #e6261a; text-shadow: 2px 2px 3px rgba(180, 20, 10, 0.3); }
-        .page-two .replay-btn { margin-top: 20px; padding: 16px 36px; font-size: clamp(18px, 4vw, 22px); font-weight: 900; color: #fff; background: linear-gradient(135deg, #e6261a, #c62828); border: 3px solid #c62828; border-radius: 50px; cursor: pointer; opacity: 0; animation: btnPop .7s 2.3s forwards; white-space: nowrap; min-width: clamp(140px, 36vw, 180px); }
-        @keyframes btnPop { 0% { opacity: 0; transform: scale(0) rotate(-180deg) } 100% { opacity: 1; transform: scale(1) rotate(0deg) } }
-    </style>
+/* ============ 结果页 ============ */
+#pageResult {
+  background:linear-gradient(160deg,rgba(45,80,45,0.97) 0%,rgba(30,55,30,0.97) 50%,rgba(20,40,20,0.98) 100%);
+  backdrop-filter:blur(6px); gap:clamp(6px,1.2vh,14px);
+}
+#pageResult h1 {
+  font-size:clamp(22px,3.5vw,42px); font-weight:800; letter-spacing:4px;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif;
+  background:linear-gradient(180deg,#F4D35E 0%,#E8A020 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+#treeCanvas {
+  border-radius:18px; border:2px solid rgba(255,255,255,0.12);
+  box-shadow:0 6px 30px rgba(0,0,0,0.4);
+  max-width:min(88vw, 680px); width:100%; height:auto;
+  background:rgba(255,255,255,0.04);
+}
+#finalScoreText {
+  font-size:clamp(16px,2.2vw,22px); font-weight:bold;
+  color:rgba(255,255,255,0.9); letter-spacing:2px;
+}
+#finalScoreText span { color:#F4D35E; font-size:clamp(22px,3vw,30px); }
+#btnRestart {
+  padding:clamp(8px,1.5vh,14px) clamp(28px,5vw,56px);
+  font-size:clamp(14px,1.8vw,20px); font-weight:800;
+  font-family:'Sniglet','ZCOOL KuaiLe',sans-serif;
+  color:#FFF;
+  background:linear-gradient(180deg,#F4D35E 0%,#D4A017 100%);
+  border:2px solid #8B6914; border-radius:50px; cursor:pointer;
+  box-shadow:0 4px 0 #6B4F10, 0 6px 20px rgba(212,160,23,0.35);
+  transition:all 0.15s; letter-spacing:2px;
+}
+#btnRestart:hover { transform:translateY(-2px); box-shadow:0 6px 0 #6B4F10, 0 10px 24px rgba(212,160,23,0.4); }
+#btnRestart:active { transform:translateY(2px); box-shadow:0 2px 0 #6B4F10, 0 3px 8px rgba(212,160,23,0.3); }
+</style>
 </head>
 <body>
-    <div class="flash-overlay" id="flashOverlay"></div>
+<div id="appRoot">
 
-    <!-- 第一页 (背景替换为参考图) -->
-    <div class="page-one" id="pageOne">
-        <div class="light-spots"><div class="light-spot"></div><div class="light-spot"></div><div class="light-spot"></div><div class="light-spot"></div><div class="light-spot"></div></div>
-        <div class="grass-layer"></div>
-        <div class="top-decoration"><div class="top-title">🧃 戳一戳AD钙奶 🧃</div><div class="top-subtitle">彩色喷泉·圆阵炸开</div></div>
-        <div class="hint-tap" id="hintTap">👆 点击瓶身，彩色哈字圆阵填满后炸开</div>
-        <!-- 修改1: P1中间引导词 -->
-        <div class="guide-tip">👆 戳一戳瓶身，快乐喷涌而出！</div>
-        <div class="grid-container" id="gridContainer"></div>
-        <div class="bottles-area">
-            <div class="base-plate"></div>
-            <div class="bottle-unit" id="bottle0" onclick="triggerFountain('bottle0')">
-                <div class="straw-tube" id="straw0" style="position:absolute;top:-52px;left:50%;transform:translateX(-50%);width:7px;height:52px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
-                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
-            </div>
-            <div class="bottle-unit" id="bottle1" onclick="triggerFountain('bottle1')">
-                <div class="straw-tube" id="straw1" style="position:absolute;top:-54px;left:50%;transform:translateX(-50%);width:7px;height:54px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
-                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
-            </div>
-            <div class="bottle-unit" id="bottle2" onclick="triggerFountain('bottle2')">
-                <div class="straw-tube" id="straw2" style="position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:7px;height:50px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
-                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
-            </div>
-            <div class="bottle-unit" id="bottle3" onclick="triggerFountain('bottle3')">
-                <div class="straw-tube" id="straw3" style="position:absolute;top:-51px;left:50%;transform:translateX(-50%);width:7px;height:51px;background:linear-gradient(90deg,#e8e8e8,#fff,#ddd,#c8c8c8);border-radius:3px 3px 0 0;"></div>
-                <div class="bottle-svg-wrap"><svg viewBox="0 0 90 200"><ellipse cx="45" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.12)"/><rect x="10" y="48" width="70" height="138" rx="16" fill="#fdfdfd"/><path d="M10,40 L10,18 Q10,6 24,6 L66,6 Q80,6 80,18 L80,40 Z" fill="#43a047"/><ellipse cx="45" cy="6" rx="32" ry="8" fill="#66bb6a"/><rect x="10" y="60" width="70" height="30" rx="5" fill="#43a047"/><text x="45" y="82" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">娃哈哈</text><line x1="12" y1="92" x2="78" y2="92" stroke="#ffc107" stroke-width="2.5"/><text x="28" y="128" font-size="36" font-weight="900" fill="#e6261a">A</text><text x="56" y="130" font-size="34" font-weight="900" fill="#2e7d32">D</text><text x="28" y="152" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">钙</text></svg></div>
-            </div>
-        </div>
-    </div>
+  <!-- ========== PAGE 1: 水果选择 ========== -->
+  <div id="pageSelect" class="page active">
+    <h1>🍎 选择你的水果 🍇</h1>
+    <p class="subtitle">点击选择想接的水果，至少选 1 种</p>
+    <div id="fruitGrid"></div>
+    <div id="selectCount">已选 0 种水果</div>
+    <button id="btnEnter" disabled>开始游戏 →</button>
+  </div>
 
-    <!-- 第二页 (参考图背景 + 人物侧面剪影填充) -->
-    <div class="page-two" id="pageTwo">
-        <div class="scene" id="scene">
-            <!-- P2顶部居中娃哈哈Logo (红底白字) -->
-            <img class="p2-logo" src="./wahaha-logo.png" alt="娃哈哈">
-            <!-- 隐藏的SVG — 精确人物侧面轮廓clipPath -->
-            <svg width="0" height="0" style="position:absolute;pointer-events:none;">
-                <defs>
-                    <!--
-                      人物剪影向下+向右移动到画面中央偏右下
-                      Y+0.05, X+0.05：头顶cx=0.45/cy=0.35, 身体cx=0.45/cy=0.58, 下半身cx=0.45/cy=0.80
-                    -->
-                    <clipPath id="personClip" clipPathUnits="objectBoundingBox">
-                        <ellipse cx="0.45" cy="0.35" rx="0.10" ry="0.07"/>
-                        <rect x="0.37" y="0.39" width="0.16" height="0.04" rx="0.01"/>
-                        <ellipse cx="0.45" cy="0.58" rx="0.17" ry="0.20"/>
-                        <ellipse cx="0.45" cy="0.80" rx="0.12" ry="0.09"/>
-                        <ellipse cx="0.31" cy="0.54" rx="0.06" ry="0.08" transform="rotate(-20, 0.31, 0.54)"/>
-                    </clipPath>
-                </defs>
-            </svg>
+  <!-- ========== GAME CONTAINER ========== -->
+  <div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+    <video id="hiddenVideo" autoplay muted playsinline></video>
+    <div id="timerBar">⏱ 30s</div>
+    <div id="hudScore">得分: <span id="scoreNum">0</span>&nbsp;&nbsp;❤️❤️❤️❤️❤️</div>
+    <div id="handCountBadge">🖐 ×0</div>
+    <div id="statusBar">摄像头启动中...</div>
+    <div id="comboFlash"></div>
+    <div id="camStatus">📷</div>
+  </div>
 
-            <div class="click-counter">已收集 <span id="haCount">0</span> 个哈</div>
-            <div class="hint-text-p2" id="hintText">👇 点击人物或瓶子！</div>
+  <!-- ========== 结果页 ========== -->
+  <div id="pageResult" class="page">
+    <h1>游戏结束！</h1>
+    <canvas id="treeCanvas" width="680" height="360"></canvas>
+    <div id="finalScoreText">最终得分 <span id="finalScoreNum">0</span></div>
+    <button id="btnRestart">再来一局 🍎</button>
+  </div>
 
-            <!-- 填充容器 — 哈字只在人物轮廓内显示 -->
-            <div class="fill-container" id="fillContainer"></div>
+</div>
 
-            <!-- 瓶子点击热区 -->
-            <div class="bottle-hitbox" id="bottleHitbox" onclick="handleBottleClick(event)"></div>
-            <!-- 人物点击热区 — 覆盖白色剪影区域 -->
-            <div class="person-hitbox" id="personHitbox" onclick="handleBottleClick(event)"></div>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
-            <div class="progress-bar-container">
-                <div class="progress-text"><span id="progressPercent">0</span>% 快乐进度</div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
-            </div>
-        </div>
-        <!-- 庆祝覆盖层 -->
-        <div class="celebration-overlay" id="celebrationOverlay">
-            <div class="overlay-bg"></div>
-            <div class="final-showcase">
-                <div class="final-bottle"><svg width="72" height="160" viewBox="0 0 72 165"><ellipse cx="38" cy="163" rx="32" ry="7" fill="rgba(0,0,0,0.15)"/><rect x="4" y="42" width="64" height="118" rx="12" fill="#fff" stroke="#333" stroke-width="2.5"/><path d="M8,36 L8,20 Q8,10 20,10 L52,10 Q64,10 64,20 L64,36 Z" fill="#43a047" stroke="#2e7d32" stroke-width="2"/><ellipse cx="36" cy="10" rx="28" ry="7" fill="#66bb6a"/><rect x="5" y="49" width="62" height="23" rx="4" fill="#43a047"/><text x="36" y="66" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">娃哈哈</text><line x1="8" y1="74" x2="64" y2="74" stroke="#ffc107" stroke-width="2.5"/><text x="22" y="107" font-size="30" font-weight="900" fill="#e6261a">A</text><text x="43" y="109" font-size="28" font-weight="900" fill="#2e7d32">D</text><text x="18" y="128" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">钙</text></svg></div>
-                <div class="tagline"><div class="line1">不管几岁！</div><div class="line2">快乐万岁</div></div>
-                <button class="replay-btn" onclick="replayP2()">再玩一次</button>
-            </div>
-        </div>
-    </div>
+<script>
+(function(){
+'use strict';
 
-    <script>
-        // ===== 彩色调色板 =====
-        const COLOR_PALETTE = [
-            '#e6261a', '#ff6b6b', '#ff9a56', '#ffe066', '#69d2e7',
-            '#a78bfa', '#f472b6', '#4ecdc4', '#ff4081', '#40c4ff',
-            '#ff5252', '#ffab40', '#b2ff59', '#7c4dff', '#00e5ff',
-            '#ff1744', '#ff9100', '#76ff03', '#2979ff', '#d500f9'
-        ];
-        function randomColor() { return COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)]; }
+// ==================== 全屏 Canvas ====================
+var CANVAS_W, CANVAS_H, HAND_RADIUS;
+var GAME_DURATION = 30;
+var MAX_LIVES = 5;
 
-        // ===== 第一页逻辑 (完全不变) =====
-        const CELL_SIZE = 40;
-        const WORDS_PER_CLICK = 20;
-        let gridContainer = document.getElementById('gridContainer');
-        let fillOrder = [], currentFillIndex = 0, gridChars = [], isExploding = false;
+var gameCanvas = document.getElementById('gameCanvas');
+var ctx = gameCanvas.getContext('2d');
 
-        function calculateCircleGrid() {
-            const w = window.innerWidth, h = window.innerHeight;
-            const centerX = w/2, centerY = h/2;
-            const maxRadius = Math.min(w, h)/2 - CELL_SIZE*0.6;
-            const cols = Math.ceil(w/CELL_SIZE), rows = Math.ceil(h/CELL_SIZE);
-            fillOrder = [];
-            for (let r=0; r<rows; r++) {
-                for (let c=0; c<cols; c++) {
-                    const cellX = c*CELL_SIZE+CELL_SIZE/2, cellY = r*CELL_SIZE+CELL_SIZE/2;
-                    const dx = cellX - centerX, dy = cellY - centerY;
-                    const dist = Math.sqrt(dx*dx+dy*dy);
-                    if (dist <= maxRadius) fillOrder.push({col:c, row:r, dist});
-                }
-            }
-            fillOrder.sort((a,b) => a.dist - b.dist);
+function updateCanvasSize() {
+  CANVAS_W = window.innerWidth;
+  CANVAS_H = window.innerHeight;
+  HAND_RADIUS = Math.max(34, Math.min(54, CANVAS_W * 0.055));
+  gameCanvas.width = CANVAS_W;
+  gameCanvas.height = CANVAS_H;
+}
+updateCanvasSize();
+window.addEventListener('resize', updateCanvasSize);
+
+// ==================== DOM ====================
+var pageSelect   = document.getElementById('pageSelect');
+var gameContainer= document.getElementById('gameContainer');
+var pageResult   = document.getElementById('pageResult');
+var fruitGrid    = document.getElementById('fruitGrid');
+var selectCount  = document.getElementById('selectCount');
+var btnEnter     = document.getElementById('btnEnter');
+var hiddenVideo  = document.getElementById('hiddenVideo');
+var timerBar     = document.getElementById('timerBar');
+var hudScore     = document.getElementById('hudScore');
+var scoreNum     = document.getElementById('scoreNum');
+var handCountBadge = document.getElementById('handCountBadge');
+var statusBar    = document.getElementById('statusBar');
+var comboFlash   = document.getElementById('comboFlash');
+var treeCanvas   = document.getElementById('treeCanvas');
+var treeCtx      = treeCanvas.getContext('2d');
+var finalScoreNum= document.getElementById('finalScoreNum');
+var btnRestart   = document.getElementById('btnRestart');
+
+// ==================== 水果类型 ====================
+var FRUIT_TYPES = [
+  { name:'apple',      label:'苹果',   color:'#E84855', highlight:'#FF7070', stem:'#5D4037', leaf:'#4CAF50' },
+  { name:'banana',     label:'香蕉',   color:'#FFD54F', highlight:'#FFECB3', stem:'#8D6E63', leaf:'#66BB6A' },
+  { name:'orange',     label:'橙子',   color:'#FF9800', highlight:'#FFB74D', stem:'#5D4037', leaf:'#4CAF50' },
+  { name:'kiwi',       label:'猕猴桃', color:'#8BC34A', highlight:'#C5E1A5', stem:'#5D4037', leaf:'#388E3C' },
+  { name:'dragon',     label:'火龙果', color:'#E91E63', highlight:'#F48FB1', stem:'#4CAF50', leaf:'#81C784' },
+  { name:'watermelon', label:'西瓜',   color:'#2E7D32', highlight:'#66BB6A', stem:'#5D4037', leaf:'#4CAF50' },
+  { name:'strawberry', label:'草莓',   color:'#D32F2F', highlight:'#EF5350', stem:'#388E3C', leaf:'#4CAF50' },
+  { name:'pineapple',  label:'菠萝',   color:'#F9A825', highlight:'#FDD835', stem:'#388E3C', leaf:'#2E7D32' },
+  { name:'grape',      label:'葡萄',   color:'#7B1FA2', highlight:'#AB47BC', stem:'#5D4037', leaf:'#4CAF50' },
+  { name:'peach',      label:'桃子',   color:'#FFAB91', highlight:'#FFCCBC', stem:'#5D4037', leaf:'#4CAF50' },
+];
+
+// ==================== 游戏状态 ====================
+var APP = {
+  selectedFruits:[],
+  score: 0,
+  lives: MAX_LIVES,
+  combo: 0,
+  fruits: [],
+  crows: [],
+  hands: [],
+  particles: [],
+  timeLeft: GAME_DURATION,
+  running: false,
+  animId: null,
+  timerInterval: null,
+  gameStartTime: 0,
+  lastSpawnTime: 0,
+  spawnDelay: 1400,
+};
+
+// ==================== 页面切换 ====================
+function showPage(name) {
+  pageSelect.classList.remove('active');
+  pageResult.classList.remove('active');
+  gameContainer.classList.remove('active');
+  if (name === 'select') { pageSelect.classList.add('active'); handCountBadge.style.display='none'; }
+  if (name === 'game')   { gameContainer.classList.add('active'); }
+  if (name === 'result') { pageResult.classList.add('active'); handCountBadge.style.display='none'; }
+}
+
+// ==================== 水果选择页 ====================
+function buildSelectPage() {
+  fruitGrid.innerHTML = '';
+  FRUIT_TYPES.forEach(function(ft) {
+    var card = document.createElement('div');
+    card.className = 'fruitCard';
+    card.dataset.fruit = ft.name;
+    var cv = document.createElement('canvas');
+    cv.width = 52; cv.height = 52;
+    card.appendChild(cv);
+    var lbl = document.createElement('div');
+    lbl.className = 'fruitLabel';
+    lbl.textContent = ft.label;
+    card.appendChild(lbl);
+    card.addEventListener('click', function() { toggleFruit(ft.name, card); });
+    fruitGrid.appendChild(card);
+    renderCardPreview(cv, ft);
+  });
+  APP.selectedFruits = [];
+  updateSelectCount();
+  btnEnter.disabled = true;
+}
+
+function renderCardPreview(cv, ft) {
+  var c = cv.getContext('2d');
+  var cx = 26, cy = 27, s = 0.85;
+  c.clearRect(0, 0, 52, 52);
+  if (ft.name === 'grape') {
+    [[0,-8],[-6,-2],[6,-2],[-7,4],[0,4],[7,4],[-2,10],[2,10]].forEach(function(p){
+      c.fillStyle = ft.color; c.beginPath(); c.arc(cx+p[0]*s, cy+p[1]*s, 5*s, 0, Math.PI*2); c.fill();
+      c.fillStyle = ft.highlight; c.beginPath(); c.arc(cx+p[0]*s-1, cy+p[1]*s-1, 1.8*s, 0, Math.PI*2); c.fill();
+    });
+  } else if (ft.name === 'banana') {
+    c.fillStyle = ft.color; c.beginPath(); c.ellipse(cx-2, cy, 18*s, 8*s, -0.25, 0, Math.PI*2); c.fill();
+    c.fillStyle = ft.highlight; c.beginPath(); c.ellipse(cx+2, cy-1, 10*s, 4*s, -0.25, 0, Math.PI*2); c.fill();
+  } else if (ft.name === 'pineapple') {
+    c.fillStyle = ft.color; c.beginPath(); c.ellipse(cx, cy+1, 11*s, 15*s, 0, 0, Math.PI*2); c.fill();
+    c.fillStyle = ft.leaf;
+    for (var i=0;i<5;i++){c.beginPath();c.ellipse(cx+(i-2)*2.8*s,cy-13,2*s,6*s,-0.15,0,Math.PI*2);c.fill();}
+  } else if (ft.name === 'strawberry') {
+    c.fillStyle = ft.color; c.beginPath(); c.moveTo(cx, cy+12); c.bezierCurveTo(cx-12,cy+2,cx-10,cy-10,cx,cy-6); c.bezierCurveTo(cx+10,cy-10,cx+12,cy+2,cx,cy+12); c.fill();
+    c.fillStyle = ft.stem; for(var i=0;i<5;i++){c.beginPath();c.ellipse(cx+(i-2)*3.5*s,cy-7,2*s,1.2*s,-0.2,0,Math.PI*2);c.fill();}
+  } else if (ft.name === 'watermelon') {
+    c.fillStyle = ft.color; c.beginPath(); c.arc(cx, cy, 14*s, 0, Math.PI*2); c.fill();
+    c.strokeStyle = ft.highlight; c.lineWidth = 2.5; c.beginPath(); c.arc(cx, cy, 11*s, Math.PI*0.55, Math.PI*1.45); c.stroke();
+  } else {
+    c.fillStyle = ft.color; c.beginPath(); c.arc(cx, cy+1, 13*s, 0, Math.PI*2); c.fill();
+    c.fillStyle = ft.highlight; c.beginPath(); c.arc(cx-4, cy-3, 4*s, 0, Math.PI*2); c.fill();
+    c.fillStyle = ft.stem; c.beginPath(); c.arc(cx, cy-12, 2*s, 0, Math.PI*2); c.fill();
+    if (ft.leaf){ c.fillStyle=ft.leaf; c.beginPath(); c.ellipse(cx+4,cy-10,3.5*s,1.8*s,0.4,0,Math.PI*2); c.fill(); }
+  }
+}
+
+function toggleFruit(name, card) {
+  var idx = APP.selectedFruits.indexOf(name);
+  if (idx >= 0) { APP.selectedFruits.splice(idx,1); card.classList.remove('selected'); }
+  else { APP.selectedFruits.push(name); card.classList.add('selected'); }
+  updateSelectCount();
+  btnEnter.disabled = APP.selectedFruits.length === 0;
+}
+function updateSelectCount() {
+  selectCount.textContent = '已选 ' + APP.selectedFruits.length + ' 种水果';
+}
+
+btnEnter.addEventListener('click', function() { startGame(); });
+btnRestart.addEventListener('click', function() { showPage('select'); });
+
+// ==================== 游戏开始 ====================
+function startGame() {
+  updateCanvasSize();
+  APP.score = 0; APP.lives = MAX_LIVES; APP.combo = 0;
+  APP.fruits = []; APP.crows = []; APP.hands = []; APP.particles = [];
+  APP.timeLeft = GAME_DURATION; APP.running = true;
+  APP.gameStartTime = Date.now(); APP.lastSpawnTime = 0; APP.spawnDelay = 1400;
+
+  showPage('game');
+  updateHUD();
+  timerBar.textContent = '⏱ ' + APP.timeLeft + 's';
+  timerBar.classList.remove('urgent');
+  comboFlash.style.opacity = '0';
+  handCountBadge.style.display = 'block';
+
+  if (APP.timerInterval) clearInterval(APP.timerInterval);
+  APP.timerInterval = setInterval(function() {
+    APP.timeLeft--;
+    timerBar.textContent = '⏱ ' + APP.timeLeft + 's';
+    if (APP.timeLeft <= 10) timerBar.classList.add('urgent');
+    if (APP.timeLeft <= 0) endGame();
+  }, 1000);
+
+  if (APP.animId) cancelAnimationFrame(APP.animId);
+  APP.animId = requestAnimationFrame(gameLoop);
+}
+
+function endGame() {
+  APP.running = false;
+  if (APP.timerInterval) { clearInterval(APP.timerInterval); APP.timerInterval = null; }
+  if (APP.animId) { cancelAnimationFrame(APP.animId); APP.animId = null; }
+  playGameOver();
+  showResult();
+}
+
+// ==================== 游戏主循环 ====================
+function gameLoop(ts) {
+  if (!APP.running) return;
+  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+  // 全屏摄像头背景
+  if (hiddenVideo.readyState >= 2) {
+    ctx.save();
+    ctx.translate(CANVAS_W, 0); ctx.scale(-1, 1);
+    ctx.drawImage(hiddenVideo, 0, 0, CANVAS_W, CANVAS_H);
+    ctx.restore();
+  } else {
+    var gr = ctx.createLinearGradient(0,0,0,CANVAS_H);
+    gr.addColorStop(0,'#1a2e1a'); gr.addColorStop(1,'#0d1a0d');
+    ctx.fillStyle = gr; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+  }
+
+  // 生成水果
+  var now = Date.now();
+  var elapsed = (now - APP.gameStartTime) / 1000;
+  var delay = Math.max(450, 1400 - elapsed * 30);
+  if (now - APP.lastSpawnTime > delay) {
+    spawnFruit();
+    APP.lastSpawnTime = now;
+  }
+
+  // 更新水果
+  updateFruits(ts, now, elapsed);
+
+  // 乌鸦炸弹
+  updateCrows();
+  drawCrowsAndBombs();
+
+  // 粒子
+  updateParticles();
+
+  // 手部指示器
+  drawHands(ts);
+
+  APP.animId = requestAnimationFrame(gameLoop);
+}
+
+// ==================== 水果生成 ====================
+function spawnFruit() {
+  var elapsed = (Date.now() - APP.gameStartTime) / 1000;
+  var speed = Math.min(1.5 + elapsed * 0.1, 7);
+  var name = APP.selectedFruits[Math.floor(Math.random() * APP.selectedFruits.length)];
+  var ft = FRUIT_TYPES.find(function(f){ return f.name===name; }) || FRUIT_TYPES[0];
+  var x = CANVAS_W * 0.06 + Math.random() * CANVAS_W * 0.88;
+  APP.fruits.push({
+    x:x, y:-55, vy:speed, type:ft,
+    size: 65 + Math.random()*35,
+    wobble: Math.random()*Math.PI*2,
+    wobbleSpeed: 0.018 + Math.random()*0.018,
+    rotation: Math.random()*Math.PI*2,
+    rotSpeed: (Math.random()-0.5)*0.02,
+    opacity:1, dying:false, dieProgress:0,
+  });
+}
+
+// ==================== 水果绘制 ====================
+function drawFruitOnCanvas(ft, x, y, size, ts) {
+  var s = size/50, now = ts;
+  ctx.save();
+  switch(ft.name){
+    case 'apple':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.arc(x,y+4*s,18*s,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.ellipse(x-5*s,y-4*s,6*s,5*s,-0.3,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.arc(x-7*s,y-8*s,3*s,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=ft.stem; ctx.lineWidth=2.5*s; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(x,y-13*s); ctx.lineTo(x+2*s,y-22*s); ctx.stroke();
+      ctx.fillStyle=ft.leaf; ctx.beginPath(); ctx.ellipse(x+5*s,y-20*s,6*s,3*s,0.5,0,Math.PI*2); ctx.fill();
+      break;
+    case 'banana':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.ellipse(x-2*s,y,22*s,10*s,-0.25,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.ellipse(x+2*s,y-1*s,14*s,5*s,-0.25,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#8D6E63'; ctx.beginPath(); ctx.arc(x-20*s,y+6*s,2*s,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+18*s,y-5*s,2*s,0,Math.PI*2); ctx.fill();
+      break;
+    case 'orange':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.arc(x,y,19*s,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.ellipse(x-6*s,y-6*s,7*s,6*s,-0.3,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.stem; ctx.beginPath(); ctx.arc(x,y-16*s,3.5*s,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.leaf; ctx.beginPath(); ctx.ellipse(x+3*s,y-19*s,5*s,2.5*s,0.3,0,Math.PI*2); ctx.fill();
+      break;
+    case 'kiwi':
+      ctx.fillStyle='#A1887F'; ctx.beginPath(); ctx.ellipse(x,y,18*s,14*s,0,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(139,105,20,0.2)'; ctx.lineWidth=3*s;
+      ctx.beginPath(); ctx.ellipse(x,y,18*s,14*s,0,0,Math.PI*2); ctx.stroke();
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.ellipse(x-3*s,y-2*s,8*s,6*s,-0.2,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.stem; ctx.beginPath(); ctx.arc(x,y-12*s,2*s,0,Math.PI*2); ctx.fill();
+      break;
+    case 'dragon':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.ellipse(x,y+2*s,16*s,20*s,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#4CAF50';
+      for(var i=0;i<8;i++){var a=(i/8)*Math.PI*2-Math.PI/2; ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*15*s-3*s,y+2*s+Math.sin(a)*19*s); ctx.lineTo(x+Math.cos(a)*15*s,y+2*s+Math.sin(a)*19*s-5*s); ctx.lineTo(x+Math.cos(a)*15*s+3*s,y+2*s+Math.sin(a)*19*s); ctx.fill();}
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.ellipse(x-4*s,y-6*s,5*s,4*s,-0.3,0,Math.PI*2); ctx.fill();
+      break;
+    case 'watermelon':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.arc(x,y,20*s,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=ft.highlight; ctx.lineWidth=3*s;
+      ctx.beginPath(); ctx.arc(x,y,17*s,Math.PI*0.6,Math.PI*1.4); ctx.stroke();
+      ctx.strokeStyle=ft.stem; ctx.lineWidth=2*s; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(x,y-19*s); ctx.lineTo(x+2*s,y-25*s); ctx.stroke();
+      break;
+    case 'strawberry':
+      ctx.fillStyle=ft.color; ctx.beginPath();
+      ctx.moveTo(x,y+18*s); ctx.bezierCurveTo(x-16*s,y+4*s,x-14*s,y-14*s,x,y-8*s);
+      ctx.bezierCurveTo(x+14*s,y-14*s,x+16*s,y+4*s,x,y+18*s); ctx.fill();
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.ellipse(x-4*s,y-3*s,4*s,3*s,-0.3,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.stem;
+      for(var i=0;i<6;i++){var a=(i/6)*Math.PI-Math.PI/2; ctx.beginPath(); ctx.ellipse(x+Math.cos(a)*5*s,y-9*s,3*s,1.5*s,a,0,Math.PI*2); ctx.fill();}
+      break;
+    case 'pineapple':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.ellipse(x,y+2*s,14*s,20*s,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.leaf;
+      for(var i=0;i<7;i++){var a=-Math.PI/2+(i-3)*0.2; ctx.beginPath(); ctx.ellipse(x+Math.cos(a)*3*s,y-20*s,2.5*s,9*s,a,0,Math.PI*2); ctx.fill();}
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.ellipse(x-4*s,y-5*s,5*s,4*s,-0.2,0,Math.PI*2); ctx.fill();
+      break;
+    case 'grape':
+      [[0,-12],[-8,-4],[8,-4],[-10,5],[0,5],[10,5],[-7,14],[7,14],[-3,20],[3,20]].forEach(function(p){
+        ctx.fillStyle=ft.color; ctx.beginPath(); ctx.arc(x+p[0]*s,y+p[1]*s,8*s,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.arc(x+p[0]*s-2*s,y+p[1]*s-2*s,3*s,0,Math.PI*2); ctx.fill();
+      });
+      ctx.strokeStyle=ft.stem; ctx.lineWidth=2*s; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(x,y-20*s); ctx.lineTo(x+3*s,y-28*s); ctx.stroke();
+      break;
+    case 'peach':
+      ctx.fillStyle=ft.color; ctx.beginPath(); ctx.arc(x,y+2*s,17*s,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,150,150,0.4)';
+      ctx.beginPath(); ctx.arc(x-8*s,y,5*s,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+8*s,y,5*s,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.highlight; ctx.beginPath(); ctx.arc(x-6*s,y-6*s,5*s,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=ft.leaf; ctx.beginPath(); ctx.ellipse(x+2*s,y-17*s,4*s,2*s,0.3,0,Math.PI*2); ctx.fill();
+      break;
+  }
+  ctx.restore();
+}
+
+function updateFruits(ts, now, elapsed) {
+  for (var i = APP.fruits.length-1; i >= 0; i--) {
+    var f = APP.fruits[i];
+    if (!f.dying) {
+      f.y += f.vy; f.wobble += f.wobbleSpeed; f.rotation += f.rotSpeed;
+      var wx = Math.sin(f.wobble) * 2.5;
+
+      // 碰撞检测（多只手）
+      var caught = false;
+      for (var h = 0; h < APP.hands.length; h++) {
+        var hd = APP.hands[h];
+        var dx = f.x - hd.x, dy = f.y - hd.y;
+        if (Math.sqrt(dx*dx+dy*dy) < f.size*0.38 + HAND_RADIUS) {
+          caught = true; break;
         }
-        function getCirclePosition(index) { if (index >= fillOrder.length) return null; const cell = fillOrder[index]; const offsetX = (window.innerWidth - Math.ceil(window.innerWidth/CELL_SIZE)*CELL_SIZE)/2; const offsetY = (window.innerHeight - Math.ceil(window.innerHeight/CELL_SIZE)*CELL_SIZE)/2; return { left: cell.col*CELL_SIZE + offsetX, top: cell.row*CELL_SIZE + offsetY }; }
-        function createStaticChar(left, top, color) { const el = document.createElement('div'); el.className='grid-char'; el.textContent='哈'; el.style.left=left+'px'; el.style.top=top+'px'; el.style.width=CELL_SIZE+'px'; el.style.height=CELL_SIZE+'px'; el.style.lineHeight=CELL_SIZE+'px'; el.style.fontSize=(CELL_SIZE*0.9)+'px'; el.style.color=color; el.dataset.origLeft=left; el.dataset.origTop=top; gridContainer.appendChild(el); gridChars.push(el); }
+      }
+      if (caught) {
+        f.dying = true;
+        // 随机得 2 或 5 分
+        var pts = Math.random() < 0.5 ? 2 : 5;
+        APP.score += pts;
+        APP.combo++;
+        playCatch(550 + APP.combo * 20);
+        spawnParticles(f.x, f.y, f.type);
+        showScorePopup(f.x, f.y, '+'+pts);
+        if (APP.combo >= 3) showCombo(APP.combo);
+        updateHUD();
+        continue;
+      }
 
-        function triggerExplosion() {
-            if (isExploding) return;
-            isExploding = true;
-            const centerX = window.innerWidth/2, centerY = window.innerHeight/2;
-            document.getElementById('flashOverlay').classList.add('active');
-            setTimeout(() => document.getElementById('flashOverlay').classList.remove('active'), 200);
-            gridChars.forEach(charEl => {
-                const origLeft = parseFloat(charEl.dataset.origLeft), origTop = parseFloat(charEl.dataset.origTop);
-                const dx = origLeft+CELL_SIZE/2 - centerX, dy = origTop+CELL_SIZE/2 - centerY;
-                const dist = Math.sqrt(dx*dx+dy*dy) || 1;
-                const nx = dx/dist, ny = dy/dist;
-                const force = 120 + Math.random()*300;
-                const targetLeft = origLeft + nx*force, targetTop = origTop + ny*force;
-                const rotTarget = (Math.random()-0.5)*720;
-                const startTime = performance.now(), duration = 600+Math.random()*400;
-                function anim(now) { const t = Math.min((now-startTime)/duration,1); const ease=1-Math.pow(1-t,3); charEl.style.left=(origLeft+(targetLeft-origLeft)*ease)+'px'; charEl.style.top=(origTop+(targetTop-origTop)*ease)+'px'; charEl.style.transform=`scale(${1+t*1.5}) rotate(${rotTarget*t}deg)`; charEl.style.opacity=1-t; if(t<1) requestAnimationFrame(anim); else charEl.remove(); }
-                requestAnimationFrame(anim);
-            });
-            for(let i=0;i<60;i++) {
-                const p=document.createElement('div'); p.className='explosion-particle'; p.textContent=['哈','哈哈','★'][Math.floor(Math.random()*3)]; p.style.color=randomColor(); p.style.fontSize=(20+Math.random()*36)+'px'; p.style.left=centerX+'px'; p.style.top=centerY+'px'; document.body.appendChild(p);
-                const angle=Math.random()*Math.PI*2, speed=150+Math.random()*500, tx=Math.cos(angle)*speed, ty=Math.sin(angle)*speed, startTime=performance.now(), dur=500+Math.random()*600;
-                function anim(now) { const t=Math.min((now-startTime)/dur,1), ease=1-Math.pow(1-t,2.5); p.style.transform=`translate(${tx*ease}px,${ty*ease}px) rotate(${t*600}deg) scale(${1+t*0.8})`; p.style.opacity=1-t; if(t<1) requestAnimationFrame(anim); else p.remove(); }
-                requestAnimationFrame(anim);
-            }
-            setTimeout(() => { document.getElementById('pageOne').classList.add('hidden'); document.getElementById('pageTwo').classList.add('visible'); gridContainer.innerHTML=''; gridChars=[]; currentFillIndex=0; isExploding=false; calculateCircleGrid(); }, 800);
+      if (f.y > CANVAS_H + 60) {
+        APP.combo = 0;
+        triggerCrow(f.x);
+        playMiss();
+        APP.fruits.splice(i, 1);
+        continue;
+      }
+
+      ctx.save();
+      ctx.globalAlpha = f.opacity;
+      ctx.shadowColor = 'rgba(255,220,80,0.35)'; ctx.shadowBlur = 8;
+      drawFruitOnCanvas(f.type, f.x + wx, f.y, f.size, ts);
+      ctx.restore();
+    } else {
+      f.dieProgress += 0.06; f.opacity = Math.max(0, 1 - f.dieProgress);
+      if (f.dieProgress >= 1) { APP.fruits.splice(i,1); continue; }
+      ctx.save(); ctx.globalAlpha = f.opacity;
+      drawFruitOnCanvas(f.type, f.x, f.y - f.dieProgress*14, f.size*(1-f.dieProgress*0.3), ts);
+      ctx.restore();
+    }
+  }
+}
+
+// ==================== 乌鸦 & 炸弹 ====================
+function triggerCrow(missX) {
+  if (APP.crows.length >= 3) return;
+  APP.crows.push({
+    x: CANVAS_W + 70, y: 50 + Math.random()*80,
+    targetX: missX,
+    phase: 'flying', progress: 0,
+    bombX:null, bombY:null, bombVy:0,
+    explosionTimer:0, explosionMax:40,
+  });
+}
+
+function updateCrows() {
+  for (var i = APP.crows.length-1; i >= 0; i--) {
+    var c = APP.crows[i];
+    if (c.phase === 'flying') {
+      c.progress += 0.016;
+      c.x = CANVAS_W+70 + (c.targetX-(CANVAS_W+70)) * c.progress;
+      c.y = 55 + Math.sin(c.progress*Math.PI)*65;
+      if (c.progress >= 0.68) { c.phase='bombing'; c.bombX=c.x; c.bombY=c.y+20; c.bombVy=0; }
+    } else if (c.phase === 'bombing') {
+      c.bombVy += 0.5; c.bombY += c.bombVy; c.x += 1.5;
+      if (c.bombY > CANVAS_H - 30) {
+        c.bombY = CANVAS_H-30; c.phase='exploding'; c.explosionTimer=0;
+        spawnExplosion(c.bombX, c.bombY); playBomb();
+        APP.lives = Math.max(0, APP.lives-1);
+        updateHUD();
+        if (APP.lives <= 0) endGame();
+      }
+    } else if (c.phase === 'exploding') {
+      c.explosionTimer++; c.x += 2.5;
+      if (c.explosionTimer > c.explosionMax) { c.phase='returning'; }
+    } else if (c.phase === 'returning') {
+      c.x += 5;
+      if (c.x > CANVAS_W+130) { APP.crows.splice(i,1); }
+    }
+  }
+}
+
+function drawCrow(x, y) {
+  ctx.save(); ctx.translate(x, y);
+  var flap = Math.sin(Date.now()*0.02)*0.22;
+  ctx.fillStyle='#1a1a2e';
+  ctx.beginPath(); ctx.ellipse(0,0,16,10,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(14,-5,8,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#FF9800'; ctx.beginPath(); ctx.moveTo(20,-7); ctx.lineTo(28,-5); ctx.lineTo(20,-3); ctx.fill();
+  ctx.fillStyle='#FFF'; ctx.beginPath(); ctx.arc(17,-7,2.5,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(18,-7,1.2,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#2d2d44';
+  ctx.save(); ctx.translate(-6,-8); ctx.rotate(-0.6+flap);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-18,-10); ctx.lineTo(-10,2); ctx.closePath(); ctx.fill();
+  ctx.restore();
+  ctx.save(); ctx.translate(6,-8); ctx.rotate(0.6-flap);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(18,-10); ctx.lineTo(10,2); ctx.closePath(); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle='#1a1a2e'; ctx.beginPath(); ctx.moveTo(-14,0); ctx.lineTo(-24,6); ctx.lineTo(-18,-2); ctx.fill();
+  ctx.strokeStyle='#FF9800'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(-4,8); ctx.lineTo(-6,14); ctx.moveTo(-6,14); ctx.lineTo(-9,16); ctx.moveTo(-6,14); ctx.lineTo(-3,16); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(4,8); ctx.lineTo(6,14); ctx.moveTo(6,14); ctx.lineTo(3,16); ctx.moveTo(6,14); ctx.lineTo(9,16); ctx.stroke();
+  ctx.restore();
+}
+
+function drawBomb(x, y) {
+  ctx.save(); ctx.translate(x,y);
+  var sp = Date.now()*0.01;
+  ctx.strokeStyle='#8B6914'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(0,-10); ctx.quadraticCurveTo(3,-16,-1,-20); ctx.stroke();
+  for(var i=0;i<3;i++){var sa=sp+i*2; ctx.fillStyle='rgba(255,200,50,'+(0.5+Math.sin(sa)*0.4)+')'; ctx.beginPath(); ctx.arc(-1,-20,3+Math.sin(sa)*2,0,Math.PI*2); ctx.fill();}
+  var g=ctx.createRadialGradient(-2,-2,2,0,0,9);
+  g.addColorStop(0,'#555'); g.addColorStop(0.6,'#222'); g.addColorStop(1,'#000');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(0,0,9,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.beginPath(); ctx.arc(-3,-3,3,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+function drawExplosion(x, y, t, maxT) {
+  var p=t/maxT, alpha=1-p;
+  ctx.save(); ctx.globalAlpha=alpha;
+  var r=20+p*70;
+  ctx.strokeStyle='#FF5722'; ctx.lineWidth=4*(1-p); ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.stroke();
+  ctx.strokeStyle='#FF9800'; ctx.lineWidth=2*(1-p); ctx.beginPath(); ctx.arc(x,y,r*0.65,0,Math.PI*2); ctx.stroke();
+  var g=ctx.createRadialGradient(x,y,0,x,y,35*(1-p));
+  g.addColorStop(0,'rgba(255,255,180,'+alpha+')'); g.addColorStop(0.5,'rgba(255,140,0,'+alpha*0.6+')'); g.addColorStop(1,'rgba(255,0,0,0)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,35,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+function drawCrowsAndBombs() {
+  APP.crows.forEach(function(c){
+    if (c.phase==='flying') drawCrow(c.x, c.y);
+    else if (c.phase==='bombing') { drawCrow(c.x, c.y); drawBomb(c.bombX, c.bombY); }
+    else if (c.phase==='exploding') drawExplosion(c.bombX, c.bombY, c.explosionTimer, c.explosionMax);
+    else if (c.phase==='returning') drawCrow(c.x, c.y-20);
+  });
+}
+
+// ==================== 粒子 ====================
+function spawnParticles(x, y, ft) {
+  var colors = [ft.color, ft.highlight, '#FFF8E7', '#F4D35E', '#FFCC80'];
+  for (var i=0;i<10;i++) {
+    var a=Math.random()*Math.PI*2, sp=2+Math.random()*3.5;
+    APP.particles.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-3,color:colors[Math.floor(Math.random()*colors.length)],life:1,decay:0.03+Math.random()*0.03,r:3+Math.random()*4,star:false});
+  }
+  for (var i=0;i<3;i++) {
+    APP.particles.push({x:x+(Math.random()-0.5)*20,y:y+(Math.random()-0.5)*20,vx:(Math.random()-0.5),vy:-2.5-Math.random()*2,color:'#F4D35E',life:1,decay:0.018,r:5+Math.random()*4,star:true});
+  }
+}
+function spawnExplosion(x, y) {
+  var colors=['#E84855','#FF9800','#F4D35E','#FF5722','#555'];
+  for(var i=0;i<28;i++){var a=Math.random()*Math.PI*2,sp=3+Math.random()*7; APP.particles.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-4.5,color:colors[Math.floor(Math.random()*colors.length)],life:1,decay:0.015+Math.random()*0.025,r:4+Math.random()*7,star:Math.random()>0.5});}
+}
+function updateParticles() {
+  for (var i=APP.particles.length-1;i>=0;i--){
+    var p=APP.particles[i];
+    p.life-=p.decay; if(p.life<=0){APP.particles.splice(i,1);continue;}
+    p.x+=p.vx; p.y+=p.vy; p.vy+=0.06;
+    ctx.save(); ctx.globalAlpha=p.life;
+    if(p.star){
+      ctx.fillStyle=p.color; var sz=p.r*p.life;
+      ctx.beginPath(); ctx.moveTo(p.x,p.y-sz); ctx.lineTo(p.x+sz*0.3,p.y-sz*0.3); ctx.lineTo(p.x+sz,p.y); ctx.lineTo(p.x+sz*0.3,p.y+sz*0.3); ctx.lineTo(p.x,p.y+sz); ctx.lineTo(p.x-sz*0.3,p.y+sz*0.3); ctx.lineTo(p.x-sz,p.y); ctx.lineTo(p.x-sz*0.3,p.y-sz*0.3); ctx.closePath(); ctx.fill();
+    } else {
+      ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+// ==================== 得分弹出 & Combo ====================
+var popups = [];
+function showScorePopup(x, y, text) {
+  popups.push({ x:x, y:y, text:text, life:1, vy:-2 });
+}
+var comboTimer = null;
+function showCombo(n) {
+  var msgs = {3:'接得好！',5:'太厉害！',8:'无敌了！',12:'完美连击！',20:'传说！'};
+  var msg = ''; Object.keys(msgs).forEach(function(k){if(n>=parseInt(k)) msg=msgs[k];});
+  if (!msg) return;
+  comboFlash.textContent = msg + ' ×'+n;
+  comboFlash.style.transition='none'; comboFlash.style.opacity='1'; comboFlash.style.transform='translate(-50%,-50%) scale(1.25)';
+  if(comboTimer) clearTimeout(comboTimer);
+  comboTimer = setTimeout(function(){
+    comboFlash.style.transition='opacity 0.5s,transform 0.5s';
+    comboFlash.style.opacity='0'; comboFlash.style.transform='translate(-50%,-50%) scale(1)';
+  }, 900);
+}
+
+// 在游戏循环外独立绘制弹出积分（overlay on canvas）
+function drawPopups() {
+  for (var i=popups.length-1;i>=0;i--){
+    var p=popups[i]; p.life-=0.04; p.y+=p.vy; p.vy*=0.95;
+    if(p.life<=0){popups.splice(i,1);continue;}
+    ctx.save(); ctx.globalAlpha=p.life;
+    ctx.font='bold '+Math.round(clamp(18,22,CANVAS_W*0.02))+'px Sniglet,ZCOOL KuaiLe,sans-serif';
+    ctx.textAlign='center';
+    ctx.strokeStyle='rgba(0,0,0,0.6)'; ctx.lineWidth=4; ctx.strokeText(p.text, p.x, p.y);
+    ctx.fillStyle='#F4D35E'; ctx.fillText(p.text, p.x, p.y);
+    ctx.restore();
+  }
+}
+function clamp(min,max,v){return Math.max(min,Math.min(max,v));}
+
+// ==================== 手部显示 ====================
+function drawHands(ts) {
+  var t = ts/1000;
+  drawPopups();
+  for (var i=0;i<APP.hands.length;i++){
+    var hd=APP.hands[i], hx=hd.x, hy=hd.y, g2=hd.grabbing;
+    ctx.save();
+    var rc = g2?'rgba(255,80,80,'+(0.7+Math.sin(t*2)*0.15)+')':'rgba(255,220,60,'+(0.65+Math.sin(t*2)*0.15)+')';
+    var gc = g2?'rgba(255,80,80,0.55)':'rgba(255,220,60,0.5)';
+    ctx.strokeStyle=rc; ctx.lineWidth=3;
+    ctx.shadowColor=gc; ctx.shadowBlur=14;
+    ctx.beginPath(); ctx.arc(hx,hy, HAND_RADIUS+9+Math.sin(t*3)*3, 0, Math.PI*2); ctx.stroke();
+    ctx.shadowBlur=0;
+    var g=ctx.createRadialGradient(hx,hy,4,hx,hy,HAND_RADIUS);
+    g.addColorStop(0,'rgba(255,255,255,0.55)');
+    g.addColorStop(0.5,g2?'rgba(255,80,80,0.22)':'rgba(244,211,94,0.22)');
+    g.addColorStop(1,'rgba(244,211,94,0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(hx,hy,HAND_RADIUS,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.arc(hx,hy,4,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+}
+
+// ==================== HUD ====================
+function updateHUD() {
+  var hearts=''; for(var i=0;i<MAX_LIVES;i++) hearts += i<APP.lives?'❤️':'🤍';
+  hudScore.innerHTML = '得分: <span id="scoreNum">'+APP.score+'</span>&nbsp;&nbsp;'+hearts;
+}
+
+// ==================== 结果页 ====================
+function showResult() {
+  showPage('result');
+  finalScoreNum.textContent = APP.score;
+  var score = APP.score;
+  var tw = 680, th = 360;
+  treeCanvas.width = tw; treeCanvas.height = th;
+  treeCtx.clearRect(0,0,tw,th);
+  drawTree(treeCtx, score, tw/2, 310, tw, th);
+}
+
+function drawTree(c, score, cx, baseY, areaW, areaH) {
+  var fruitCount = Math.max(1, Math.floor(score/10));
+  var maxF = 20;
+  var cnt = Math.min(fruitCount, maxF);
+  var ts = 0.38 + (cnt/maxF)*0.62;
+  var trunkW=14*ts, trunkH=90*ts, canopyR=60*ts;
+
+  // 草地
+  c.fillStyle='rgba(74,124,89,0.25)';
+  c.beginPath(); c.ellipse(cx,baseY, areaW*0.46, 18, 0,0,Math.PI*2); c.fill();
+
+  // 树干
+  var tg=c.createLinearGradient(cx-trunkW,0,cx+trunkW,0);
+  tg.addColorStop(0,'#5D4037'); tg.addColorStop(0.5,'#8D6E63'); tg.addColorStop(1,'#5D4037');
+  c.fillStyle=tg;
+  c.beginPath(); c.moveTo(cx-trunkW/2,baseY); c.lineTo(cx-trunkW*0.3,baseY-trunkH);
+  c.lineTo(cx+trunkW*0.3,baseY-trunkH); c.lineTo(cx+trunkW/2,baseY); c.fill();
+
+  // 树枝
+  c.strokeStyle='#6D4C41'; c.lineWidth=3*ts; c.lineCap='round';
+  var bY=baseY-trunkH;
+  c.beginPath(); c.moveTo(cx,bY); c.lineTo(cx-canopyR*0.72,bY-canopyR*0.55); c.stroke();
+  c.beginPath(); c.moveTo(cx,bY); c.lineTo(cx+canopyR*0.72,bY-canopyR*0.55); c.stroke();
+  c.beginPath(); c.moveTo(cx,bY); c.lineTo(cx,bY-canopyR); c.stroke();
+
+  // 树冠
+  var centers=[[cx,bY-canopyR*0.52],[cx-canopyR*0.48,bY-canopyR*0.28],[cx+canopyR*0.48,bY-canopyR*0.28]];
+  centers.forEach(function(cc){
+    var gc=c.createRadialGradient(cc[0],cc[1],canopyR*0.28,cc[0],cc[1],canopyR);
+    gc.addColorStop(0,'#81C784'); gc.addColorStop(0.6,'#4CAF50'); gc.addColorStop(1,'#2E7D32');
+    c.fillStyle=gc; c.beginPath(); c.arc(cc[0],cc[1],canopyR,0,Math.PI*2); c.fill();
+  });
+
+  // 结果文字
+  c.fillStyle='rgba(139,105,20,0.85)';
+  c.font='bold 15px Sniglet, ZCOOL KuaiLe, sans-serif'; c.textAlign='center';
+  c.fillText(score+' 分  →  树上结了 '+fruitCount+' 个果子', cx, baseY+32);
+
+  // 随机果子
+  var seed = score*137;
+  function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
+  var pool = APP.selectedFruits.length>0 ? APP.selectedFruits : FRUIT_TYPES.map(function(f){return f.name;});
+
+  for (var i=0;i<fruitCount;i++){
+    var ang=rnd()*Math.PI*2, dist=rnd()*canopyR*0.82;
+    var fx=cx+Math.cos(ang)*dist, fy=bY-canopyR*0.52+Math.sin(ang)*dist*0.78;
+    var fn=pool[Math.floor(rnd()*pool.length)];
+    var ft=FRUIT_TYPES.find(function(f){return f.name===fn;});
+    if (!ft) continue;
+    var sz=18+rnd()*14;
+    if (ft.name==='grape'){
+      [[0,-3],[-3,1],[3,1],[-3,5],[3,5],[0,7]].forEach(function(p){
+        c.fillStyle=ft.color; c.beginPath(); c.arc(fx+p[0],fy+p[1],3.5,0,Math.PI*2); c.fill();
+      });
+    } else if (ft.name==='banana'){
+      c.fillStyle=ft.color; c.beginPath(); c.ellipse(fx-1,fy+1,sz*0.36,sz*0.18,-0.25,0,Math.PI*2); c.fill();
+    } else {
+      c.fillStyle=ft.color; c.beginPath(); c.arc(fx,fy,sz*0.36,0,Math.PI*2); c.fill();
+      c.fillStyle=ft.highlight; c.beginPath(); c.arc(fx-2,fy-2,sz*0.13,0,Math.PI*2); c.fill();
+    }
+  }
+}
+
+// ==================== 音效 ====================
+var audioCtx=null;
+function getAC(){ if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}} return audioCtx;}
+function beep(type,freq,dur,vol){try{var ac=getAC();if(!ac)return;var o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type=type;o.frequency.setValueAtTime(freq,ac.currentTime);o.frequency.exponentialRampToValueAtTime(freq*1.5,ac.currentTime+dur*0.5);g.gain.setValueAtTime(vol,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);o.start(ac.currentTime);o.stop(ac.currentTime+dur);}catch(e){}}
+function playCatch(f){ beep('sine',f,0.28,0.3); }
+function playMiss(){ beep('triangle',280,0.3,0.22); }
+function playBomb(){
+  [200,160,120,80].forEach(function(f,i){setTimeout(function(){beep('sawtooth',f,0.22,0.14);},i*80);});
+}
+function playGameOver(){
+  [330,262,220,175].forEach(function(f,i){setTimeout(function(){beep('sine',f,0.38,0.18);},i*240);});
+}
+
+// ==================== MediaPipe ====================
+var hands = null;
+var mpLoopRunning = false;
+
+function detectGrab(lm){
+  var pc = lm[9];
+  var tips = [lm[4],lm[8],lm[12],lm[16],lm[20]];
+  for(var i=0;i<tips.length;i++){
+    var dx=tips[i].x-pc.x, dy=tips[i].y-pc.y, dz=tips[i].z-pc.z;
+    if(Math.sqrt(dx*dx+dy*dy+dz*dz) > 0.28) return false;
+  }
+  return true;
+}
+
+function onHandsResults(results){
+  var det = results.multiHandLandmarks || [];
+  handCountBadge.textContent = '🖐 ×' + det.length;
+  if(!APP.running){ APP.hands = []; return; }
+  APP.hands = det.map(function(lm){
+    var px = (lm[0].x + lm[9].x) / 2;
+    var py = (lm[0].y + lm[9].y) / 2;
+    // MediaPipe 返回的坐标是镜像的，x=0为右侧，x=1为左侧；我们镜像显示摄像头，所以直接用(1-px)
+    return { x: (1-px)*CANVAS_W, y: py*CANVAS_H, grabbing: detectGrab(lm) };
+  });
+  statusBar.textContent = det.length > 0
+    ? '🖐 ×' + det.length + ' 只手检测到！快去接水果~'
+    : '请把手伸到摄像头前开始接水果';
+}
+
+// 独立的 MediaPipe 帧发送循环（不依赖 Camera 类）
+function mpSendLoop(){
+  if(!mpLoopRunning) return;
+  if(hands && hiddenVideo.readyState >= 2){
+    hands.send({image: hiddenVideo});
+  }
+  // ~30fps
+  setTimeout(mpSendLoop, 33);
+}
+
+function waitForHandsLib(cb){
+  if(typeof Hands !== 'undefined'){
+    cb(); return;
+  }
+  setTimeout(function(){ waitForHandsLib(cb); }, 200);
+}
+
+function initMediaPipe(){
+  waitForHandsLib(function(){
+    try{
+      hands = new Hands({
+        locateFile: function(f){
+          return 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/' + f;
         }
+      });
+      hands.setOptions({
+        maxNumHands: 10,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+      hands.onResults(onHandsResults);
+      // 预加载 WASM 模型
+      hands.initialize().then(function(){
+        statusBar.textContent = '📷 手势模型加载完成，正在请求摄像头...';
+        startCamera();
+      }).catch(function(e){
+        console.warn('hands.initialize failed:', e);
+        startCamera();
+      });
+    } catch(e){
+      console.error('MediaPipe init error:', e);
+      setTimeout(initMediaPipe, 1000);
+    }
+  });
+}
 
-        window.triggerFountain = function(bottleId) {
-            if (isExploding) return;
-            const bottle = document.getElementById(bottleId);
-            if (!bottle || currentFillIndex >= fillOrder.length) return;
-            bottle.classList.add('bouncing');
-            const straw = document.getElementById('straw'+bottleId.slice(-1));
-            if(straw) straw.classList.add('wiggling');
-            setTimeout(() => { bottle.classList.remove('bouncing'); if(straw) straw.classList.remove('wiggling'); }, 500);
-            // 修改2: 起点统一从整个瓶子顶部（吸管顶端）发射，点击瓶身任意位置都从此处喷出
-            let originX, originY;
-            const bottleRect = bottle.getBoundingClientRect();
-            originX = bottleRect.left + bottleRect.width / 2;
-            if(straw) {
-                const r = straw.getBoundingClientRect();
-                originY = r.top; // 吸管顶端
-            } else {
-                originY = bottleRect.top - 10;
-            }
-            const count = Math.min(WORDS_PER_CLICK, fillOrder.length - currentFillIndex);
-            for(let i=0;i<count;i++) {
-                const targetIdx = currentFillIndex+i;
-                const pos = getCirclePosition(targetIdx);
-                if(!pos) break;
-                const color = randomColor();
-                const particle = document.createElement('div'); particle.className='flying-particle'; particle.textContent='哈'; particle.style.color=color; particle.style.fontSize=(CELL_SIZE*0.9)+'px'; particle.style.left=originX+'px'; particle.style.top=originY+'px'; document.body.appendChild(particle);
-                const startTime=performance.now(), duration=350+i*20;
-                const targetLeft=pos.left+CELL_SIZE/2, targetTop=pos.top+CELL_SIZE/2, midY=originY-70;
-                function anim(now) { const t=Math.min((now-startTime)/duration,1); let cx,cy; if(t<0.25){const p=t/0.25; cx=originX; cy=originY+(midY-originY)*p;}else{const p=(t-0.25)/0.75; cx=originX+(targetLeft-originX)*p; cy=midY+(targetTop-midY)*p;} particle.style.left=cx+'px'; particle.style.top=cy+'px'; particle.style.opacity=t<0.1?t/0.1:1; particle.style.transform=`scale(${1+Math.sin(t*Math.PI)*0.3}) rotate(${t*360}deg)`; if(t<1) requestAnimationFrame(anim); else { particle.remove(); createStaticChar(pos.left, pos.top, color); if(gridChars.length>=fillOrder.length && !isExploding) setTimeout(triggerExplosion,300); } }
-                requestAnimationFrame(anim);
-            }
-            currentFillIndex += count;
-        };
+function startCamera(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    statusBar.textContent = '⚠️ 请使用 Chrome/Edge 并在 localhost 或 HTTPS 环境运行';
+    return;
+  }
+  statusBar.textContent = '正在请求摄像头权限...';
+  navigator.mediaDevices.getUserMedia({
+    video:{ width:{ideal:1280}, height:{ideal:720}, facingMode:'user' },
+    audio: false
+  }).then(function(stream){
+    hiddenVideo.srcObject = stream;
+    hiddenVideo.onloadedmetadata = function(){
+      hiddenVideo.play().then(function(){
+        statusBar.textContent = '✅ 摄像头就绪！选好水果开始游戏 🍎';
+        // 启动独立帧发送循环
+        mpLoopRunning = true;
+        mpSendLoop();
+      }).catch(function(e){
+        statusBar.textContent = '⚠️ 视频播放失败：' + e.message;
+      });
+    };
+  }).catch(function(e){
+    var msg = e.name === 'NotAllowedError' ? '请允许摄像头权限后刷新页面' :
+              e.name === 'NotFoundError'   ? '未找到摄像头设备'          :
+              (e.message || '未知错误');
+    statusBar.textContent = '⚠️ 摄像头不可用：' + msg;
+  });
+}
 
-        calculateCircleGrid();
-        window.addEventListener('resize', () => { if(!isExploding){ gridContainer.innerHTML=''; gridChars=[]; currentFillIndex=0; calculateCircleGrid(); } });
+// ==================== 初始化 ====================
+buildSelectPage();
+statusBar.textContent = '⏳ 正在加载手势检测模型...';
+// 页面加载后立即初始化（不等游戏开始）
+initMediaPipe();
 
-        // ===== 第二页逻辑 —— 精确人物剪影：小字号哈字，胃部→头部填充 =====
-        const TOTAL_HA_NEEDED = 100, HA_PER_CLICK = 20;
-        let filledCount = 0, totalHaCollected = 0, isFinished = false;
-        let bottleHitbox = null,
-              fillContainerP2 = null,
-              progressFill = null,
-              progressPercent = null,
-              haCountEl = null,
-              hintTextP2 = null,
-              celebrationOverlay = null,
-              haPositionsP2 = [],
-              allHaElsP2 = [];
-
-        // 在页面显示时再获取DOM元素，确保绑定正确
-        function initPageTwo() {
-            bottleHitbox = document.getElementById('bottleHitbox');
-            fillContainerP2 = document.getElementById('fillContainer');
-            progressFill = document.getElementById('progressFill');
-            progressPercent = document.getElementById('progressPercent');
-            haCountEl = document.getElementById('haCount');
-            hintTextP2 = document.getElementById('hintText');
-            celebrationOverlay = document.getElementById('celebrationOverlay');
-        }
-
-        function buildHaChars() {
-            if (!fillContainerP2) initPageTwo();
-            haPositionsP2.length = 0;
-            generatePersonPositions();
-            fillContainerP2.innerHTML = '';
-            for (let i = 0; i < TOTAL_HA_NEEDED; i++) {
-                const p = haPositionsP2[i];
-                const el = document.createElement('div');
-                el.className = 'ha-char';
-                el.textContent = '哈';
-                el.style.left = (p.x * 100) + '%';
-                el.style.top = (p.y * 100) + '%';
-                el.style.fontSize = p.size + 'px';
-                el.style.color = p.color;
-                el.style.transform = 'rotate(' + p.rotation + 'deg)';
-                el.dataset.index = i;
-                fillContainerP2.appendChild(el);
-            }
-            allHaElsP2 = fillContainerP2.querySelectorAll('.ha-char');
-        }
-
-        /*
-         * 人物轮廓区域 (哈字下移0.06，clipPath不变):
-         *   胃部(y≈58%-74%)  头部(y≈34%-48%)
-         */
-        function generatePersonPositions() {
-            const regions = [
-                { cx: 0.45, cy: 0.64, rx: 0.16, ry: 0.08, yMin: 0.58, yMax: 0.74, xMin: 0.29, xMax: 0.61, count: 20 },
-                { cx: 0.45, cy: 0.58, rx: 0.15, ry: 0.06, yMin: 0.50, yMax: 0.62, xMin: 0.30, xMax: 0.60, count: 20 },
-                { cx: 0.45, cy: 0.50, rx: 0.14, ry: 0.05, yMin: 0.46, yMax: 0.54, xMin: 0.31, xMax: 0.59, count: 20 },
-                { cx: 0.45, cy: 0.47, rx: 0.08, ry: 0.02, yMin: 0.45, yMax: 0.49, xMin: 0.37, xMax: 0.53, count: 20 },
-                { cx: 0.45, cy: 0.41, rx: 0.09, ry: 0.05, yMin: 0.34, yMax: 0.48, xMin: 0.35, xMax: 0.55, count: 20 },
-            ];
-
-            haPositionsP2 = [];
-            regions.forEach(region => {
-                for (let i = 0; i < region.count; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const r = Math.sqrt(Math.random());
-                    let x = region.cx + Math.cos(angle) * r * region.rx;
-                    let y = region.cy + Math.sin(angle) * r * region.ry;
-                    // 修改3: 严格钳制在区域内，不超出clipPath白色轮廓
-                    y = Math.max(region.yMin, Math.min(region.yMax, y));
-                    x = Math.max(region.xMin, Math.min(region.xMax, x));
-                    haPositionsP2.push({
-                        x, y,
-                        size: 14 + Math.random() * 2,
-                        rotation: -30 + Math.random() * 60,
-                        color: '#e6261a'
-                    });
-                }
-            });
-            // 按Y从大到小排序 = 从下往上填充
-            haPositionsP2.sort((a, b) => b.y - a.y);
-        }
-        generatePersonPositions();
-
-        // 页面加载完成后初始化
-        initPageTwo();
-        buildHaChars();
-
-        // 全局点击处理函数 — 直接用onclick绑定，避免addEventListener失效
-        window.handleBottleClick = function(e) {
-            e.stopPropagation();
-            if (isFinished) return;
-
-            if (!bottleHitbox) initPageTwo();
-
-            bottleHitbox.classList.add('clicked');
-            setTimeout(() => bottleHitbox.classList.remove('clicked'), 400);
-
-            // 获取瓶子热区位置 — 飞行起点在瓶口/吸管处 (热区上部)
-            const rect = bottleHitbox.getBoundingClientRect();
-            const sx = rect.left + rect.width / 2;
-            const sy = rect.top + rect.height * 0.10;  // 瓶口位置, 水流从瓶口向上喷射
-
-            // 飞行粒子：从瓶子飞向人物身体区域
-            for (let j = 0; j < 8; j++) {
-                setTimeout(() => {
-                    flyHaToPerson(sx, sy);
-                }, j * 40);
-            }
-
-            // 填充静态哈字：从当前填充位置开始，填HA_PER_CLICK个
-            for (let i = 0; i < HA_PER_CLICK; i++) {
-                if (filledCount >= TOTAL_HA_NEEDED) break;
-                const idx = filledCount++;
-                allHaElsP2[idx].classList.add('filled');
-                totalHaCollected++;
-            }
-            updateProgressP2();
-        };
-
-        function flyHaToPerson(sx, sy) {
-            const el = document.createElement('div');
-            el.style.cssText = 'position:fixed;font-weight:900;font-family:"ZCOOL KuaiLe","Microsoft YaHei",sans-serif;pointer-events:none;z-index:50;white-space:nowrap;will-change:transform,opacity;';
-            el.textContent = '哈';
-            el.style.color = '#e6261a';
-            el.style.fontSize = (14 + Math.random() * 4) + 'px';
-            el.style.left = sx + 'px';
-            el.style.top = sy + 'px';
-            document.body.appendChild(el);
-
-            /*
-             * 水流轨迹 — 模拟哈字像水流一样从瓶子流入人体:
-             *   阶段1 (0-30%): 从瓶口向上喷出, 弧线飞到人物嘴部 (画面 x≈40%, y≈34%)
-             *   阶段2 (30-70%): 沿喉管向下流淌, 经过喉管 (y:36%-40%) 进入身体
-             *   阶段3 (70-100%): 在身体内散开, 随机漂移到胃部区域 (y:42%-62%)
-             *
-             * 使用三次贝塞尔曲线 + 正弦摆动模拟水流效果
-             */
-            // 哈字下移后嘴部坐标：y约38%-42%, x约41%-49%
-            const mouthX = window.innerWidth * (0.41 + Math.random() * 0.08);
-            const mouthY = window.innerHeight * (0.38 + Math.random() * 0.04);
-            const throatY = mouthY + window.innerHeight * 0.04;
-            const bodyX = window.innerWidth * (0.39 + Math.random() * 0.12);
-            const bodyY = throatY + window.innerHeight * (0.12 + Math.random() * 0.18);
-
-            // 水流速度稍慢, 体现"流动感"
-            const dur = 600 + Math.random() * 400;
-            const start = performance.now();
-
-            // 水流摆动幅度
-            const swayFreq = 2.5 + Math.random() * 1.5;  // 摆动频率
-            const swayAmp = 8 + Math.random() * 16;       // 摆动幅度(px)
-
-            function anim(now) {
-                const t = Math.min((now - start) / dur, 1);
-
-                let cx, cy, scale, opacity, rot;
-
-                if (t < 0.30) {
-                    // 阶段1: 从瓶子向上弧线飞到嘴部 (ease-out)
-                    const pt = t / 0.30;
-                    const ease = 1 - Math.pow(1 - pt, 2.5);
-                    // 向上弧线: 控制点偏右上方
-                    const cpX = sx + (mouthX - sx) * 0.4 - 30;
-                    const cpY = sy - window.innerHeight * 0.12;
-                    const t2 = 1 - ease;
-                    cx = t2 * t2 * sx + 2 * t2 * ease * cpX + ease * ease * mouthX;
-                    cy = t2 * t2 * sy + 2 * t2 * ease * cpY + ease * ease * mouthY;
-                    scale = 0.8 + pt * 0.3;
-                    opacity = 0.6 + pt * 0.4;
-                    rot = -15 + pt * 25;
-                } else if (t < 0.70) {
-                    // 阶段2: 沿喉管向下流入身体 (线性流动+摆动)
-                    const pt = (t - 0.30) / 0.40;
-                    const easeIn = pt * pt;
-                    cx = mouthX + (bodyX - mouthX) * easeIn + Math.sin(pt * swayFreq * Math.PI) * swayAmp;
-                    cy = mouthY + (bodyY - mouthY) * easeIn;
-                    scale = 1.0 + Math.sin(pt * Math.PI) * 0.15;
-                    opacity = 0.9;
-                    rot = 25 + pt * 30 + Math.sin(pt * swayFreq * Math.PI) * 8;
-                } else {
-                    // 阶段3: 身体内漂移散开, 渐渐消失
-                    const pt = (t - 0.70) / 0.30;
-                    const easeOut = 1 - Math.pow(1 - pt, 2);
-                    cx = bodyX + Math.sin(pt * 4 * Math.PI) * swayAmp * (1 - pt);
-                    cy = bodyY + easeOut * window.innerHeight * 0.04;
-                    scale = 1.0 - pt * 0.3;
-                    opacity = 0.9 * (1 - pt);
-                    rot = 55 + pt * 40;
-                }
-
-                el.style.left = cx + 'px';
-                el.style.top = cy + 'px';
-                el.style.opacity = opacity;
-                el.style.transform = 'scale(' + scale + ') rotate(' + rot + 'deg)';
-
-                if (t < 1) {
-                    requestAnimationFrame(anim);
-                } else {
-                    el.remove();
-                }
-            }
-            requestAnimationFrame(anim);
-        }
-
-        function updateProgressP2() {
-            const pct = Math.round((filledCount / TOTAL_HA_NEEDED) * 100);
-            progressFill.style.width = pct + '%';
-            progressPercent.textContent = pct;
-            haCountEl.textContent = totalHaCollected;
-            if (pct === 100 && !isFinished) {
-                isFinished = true;
-                hintTextP2.textContent = '';
-                setTimeout(() => {
-                    celebrationOverlay.classList.add('active');
-                    setTimeout(() => {
-                        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-                        for (let w = 0; w < 4; w++) setTimeout(() => {
-                            for (let i = 0; i < 22; i++) createBurstParticle(cx, cy, w);
-                        }, w * 250);
-                        setTimeout(() => {
-                            for (let i = 0; i < 35; i++) createEdgeParticle();
-                        }, 1000);
-                    }, 150);
-                }, 400);
-            }
-        }
-
-        function createBurstParticle(cx, cy, wave) {
-            const p = document.createElement('div');
-            p.className = 'burst-particle';
-            p.textContent = ['哈', '哈哈', '哈哈哈'][Math.floor(Math.random() * 3)];
-            p.style.color = ['#e6261a', '#FF6B6B', '#FFE66D', '#4ECDC4', '#A78BFA'][Math.floor(Math.random() * 5)];
-            p.style.fontSize = (26 + Math.random() * 32) + 'px';
-            const angle = Math.random() * Math.PI * 2 + wave * 0.4;
-            const speed = 180 + Math.random() * 450 + wave * 120;
-            const tx = Math.cos(angle) * speed, ty = Math.sin(angle) * speed;
-            p.style.left = cx + 'px';
-            p.style.top = cy + 'px';
-            celebrationOverlay.appendChild(p);
-            const start = performance.now(), dur = 1400 + Math.random() * 1000;
-            function anim(now) {
-                const t = Math.min((now - start) / dur, 1);
-                const ease = 1 - Math.pow(1 - t, 2.2);
-                p.style.transform = 'translate(' + (tx * ease) + 'px, ' + (ty * ease) + 'px) rotate(' + (t * 800) + 'deg) scale(' + (1 + Math.sin(t * Math.PI * 2) * 0.4) + ')';
-                p.style.opacity = 1 - t * t * t;
-                if (t < 1) requestAnimationFrame(anim);
-                else p.remove();
-            }
-            requestAnimationFrame(anim);
-        }
-        function createEdgeParticle() {
-            const p = document.createElement('div');
-            p.className = 'burst-particle';
-            p.textContent = ['哈', '哈哈', '★'][Math.floor(Math.random() * 3)];
-            p.style.color = ['#e6261a', '#FF6B6B', '#4ECDC4', '#FFE66D'][Math.floor(Math.random() * 4)];
-            p.style.fontSize = (22 + Math.random() * 28) + 'px';
-            const side = Math.floor(Math.random() * 4);
-            let sx, sy;
-            const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-            if (side === 0) { sx = Math.random() * window.innerWidth; sy = -40; }
-            else if (side === 1) { sx = window.innerWidth + 40; sy = Math.random() * window.innerHeight; }
-            else if (side === 2) { sx = Math.random() * window.innerWidth; sy = window.innerHeight + 40; }
-            else { sx = -40; sy = Math.random() * window.innerHeight; }
-            const tx = cx + (Math.random() - 0.5) * window.innerWidth * 0.65;
-            const ty = cy + (Math.random() - 0.5) * window.innerHeight * 0.65;
-            p.style.left = sx + 'px';
-            p.style.top = sy + 'px';
-            celebrationOverlay.appendChild(p);
-            const start = performance.now(), dur = 1100 + Math.random() * 900;
-            function anim(now) {
-                const t = Math.min((now - start) / dur, 1);
-                const ease = 1 - Math.pow(1 - t, 3);
-                p.style.transform = 'translate(' + ((tx - sx) * ease) + 'px, ' + ((ty - sy) * ease) + 'px) rotate(' + (t * 620) + 'deg)';
-                p.style.opacity = t < 0.65 ? t / 0.65 : 1 - (t - 0.65) / 0.35;
-                if (t < 1) requestAnimationFrame(anim);
-                else p.remove();
-            }
-            requestAnimationFrame(anim);
-        }
-
-        window.replayP2 = function() {
-            isFinished = false; filledCount = 0; totalHaCollected = 0;
-            initPageTwo();
-            progressFill.style.width = '0%'; progressPercent.textContent = '0'; haCountEl.textContent = '0';
-            hintTextP2.textContent = '👇 点击人物或瓶子！';
-            celebrationOverlay.classList.remove('active');
-            celebrationOverlay.querySelectorAll('.burst-particle').forEach(p => p.remove());
-            // 重置哈字：重新生成位置和元素
-            buildHaChars();
-            document.getElementById('pageTwo').classList.remove('visible');
-            document.getElementById('pageOne').classList.remove('hidden');
-            gridContainer.innerHTML = ''; gridChars = []; currentFillIndex = 0; isExploding = false;
-            calculateCircleGrid();
-        };
-
-        // 页面加载完成后初始化
-        initPageTwo();
-        generatePersonPositions();
-        // 预创建所有哈字元素
-        fillContainerP2.innerHTML = '';
-        for (let i = 0; i < TOTAL_HA_NEEDED; i++) {
-            const p = haPositionsP2[i];
-            const el = document.createElement('div');
-            el.className = 'ha-char';
-            el.textContent = '哈';
-            el.style.left = (p.x * 100) + '%';
-            el.style.top = (p.y * 100) + '%';
-            el.style.fontSize = p.size + 'px';
-            el.style.color = p.color;
-            el.style.transform = 'rotate(' + p.rotation + 'deg)';
-            el.dataset.index = i;
-            fillContainerP2.appendChild(el);
-        }
-        allHaElsP2 = fillContainerP2.querySelectorAll('.ha-char');
-    </script>
+})();
+</script>
 </body>
 </html>
